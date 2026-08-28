@@ -1,5 +1,5 @@
 {
-  "version": "1787926442762",
+  "version": "1787927317280",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -82,7 +82,7 @@
       "id": "custom-1787918013902",
       "mapId": "all",
       "type": "ranenny_stalker",
-      "name": "Раненный сталкер #2",
+      "name": "Раненный сталкер",
       "location": "Радар",
       "x": 1260,
       "y": 736,
@@ -93,7 +93,7 @@
       "id": "custom-1787918088232",
       "mapId": "all",
       "type": "ranenny_stalker",
-      "name": "Раненный сталкер #3",
+      "name": "Раненный сталкер",
       "location": "Робада",
       "x": 1139,
       "y": 728,
@@ -104,7 +104,7 @@
       "id": "custom-1787918211130",
       "mapId": "all",
       "type": "ranenny_stalker",
-      "name": "Раненный сталкер #4",
+      "name": "Раненный сталкер",
       "location": "Рудник",
       "x": 1801,
       "y": 1086,
@@ -115,7 +115,7 @@
       "id": "custom-1787918324051",
       "mapId": "all",
       "type": "ranenny_stalker",
-      "name": "Раненный сталкер #5",
+      "name": "Раненный сталкер",
       "location": "Пустошь",
       "x": 1450,
       "y": 1505,
@@ -157,7 +157,7 @@
     },
     {
       "id": "custom-1787924518151",
-      "mapId": "map1",
+      "mapId": "all",
       "type": "ranenny_stalker",
       "name": "Раненный сталкер",
       "location": "Пустошь/Ангел Пайн",
