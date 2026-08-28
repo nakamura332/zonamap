@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивная карта Артефактов и Аномалий GTA SA SAMP [STALKER Zone]</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="pda-theme">
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="top-nav">
+            <div class="brand">
+                <div class="pda-status-dot"></div>
+                <i class="fa-solid fa-radiation brand-icon"></i>
+                <div class="brand-text">
+                    <h1>STALKER SAMP <span>// BONE COUNTY ZONE</span></h1>
+                    <p class="subtitle">Карта артефактов, аномалий, нычек и луна (Пузырей)</p>
+                </div>
+            </div>
+
+            <div class="top-controls">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Поиск объекта, аномалии или пузыря (#1-14)...">
+                    <button id="clearSearch" class="btn-icon" title="Очистить"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat-badge" title="Всего маркеров на карте">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="totalMarkersCount">0</span>
+                    </div>
+                    <div class="stat-badge hazard" title="Активные зоны">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="hazardZonesCount">0 Зоны</span>
+                    </div>
+                </div>
+
+                <div class="map-version-selector" title="Карта артефактов меняется после рестарта сервера">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <select id="mapVersionSelect"></select>
+                </div>
+
+                <div class="view-mode-selector">
+                    <button class="mode-btn active" data-map-style="radar" title="Радарная карта GTA SA">
+                        <i class="fa-solid fa-map"></i> Радар
+                    </button>
+                    <button class="mode-btn" data-map-style="satellite" title="Спутниковая карта Zone">
+                        <i class="fa-solid fa-globe"></i> Спутник
+                    </button>
+                    <button class="mode-btn" data-map-style="tactical" title="Тактическая сетка PDA">
+                        <i class="fa-solid fa-braille"></i> КПК PDA
+                    </button>
+                </div>
+
+                <button class="admin-toggle-btn" id="btnToggleAdmin" title="Переключить режим редактирования (Админка)">
+                    <i class="fa-solid fa-user-gear"></i> <span>Админка</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="main-workspace">
+            <!-- Sidebar Panel -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2><i class="fa-solid fa-sliders"></i> Фильтры и Легенда</h2>
+                    <button class="btn-toggle-sidebar" id="toggleSidebar" title="Свернуть панель">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                </div>
+
+                <!-- Legend & Layer Toggles -->
+                <div class="sidebar-content">
+                    <!-- 1. Аномалии и нычки зоны -->
+                    <div class="filter-section">
+                        <div class="section-title">
+                            <span>Аномалии и нычки зоны</span>
+                            <button class="btn-link" id="selectAllTypes">Все</button>
+                        </div>
+                        <div class="filter-grid">
+                            <label class="filter-card zharka active" data-type="zharka">
+                                <input type="checkbox" checked value="zharka">
+                                <span class="marker-icon-preview zharka"><i class="fa-solid fa-fire-flame-curved"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Жарка</span>
+                                    <span class="filter-count" id="count-zharka">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card gazirovka active" data-type="gazirovka">
+                                <input type="checkbox" checked value="gazirovka">
+                                <span class="marker-icon-preview gazirovka"><i class="fa-solid fa-vial"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Газировка</span>
+                                    <span class="filter-count" id="count-gazirovka">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card elektra active" data-type="elektra">
+                                <input type="checkbox" checked value="elektra">
+                                <span class="marker-icon-preview elektra"><i class="fa-solid fa-bolt"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Электра</span>
+                                    <span class="filter-count" id="count-elektra">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card tramplin active" data-type="tramplin">
+                                <input type="checkbox" checked value="tramplin">
+                                <span class="marker-icon-preview tramplin"><i class="fa-solid fa-tornado"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Трамплин</span>
+                                    <span class="filter-count" id="count-tramplin">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card medusa active" data-type="medusa">
+                                <input type="checkbox" checked value="medusa">
+                                <span class="marker-icon-preview medusa"><i class="fa-solid fa-atom"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Медуза</span>
+                                    <span class="filter-count" id="count-medusa">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card voda active" data-type="voda">
+                                <input type="checkbox" checked value="voda">
+                                <span class="marker-icon-preview voda"><i class="fa-solid fa-droplet"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Вода</span>
+                                    <span class="filter-count" id="count-voda">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card luna active" data-type="luna">
+                                <input type="checkbox" checked value="luna">
+                                <span class="marker-icon-preview luna"><i class="fa-solid fa-moon"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Луна</span>
+                                    <span class="filter-count" id="count-luna">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card nychka_zona active" data-type="nychka_zona">
+                                <input type="checkbox" checked value="nychka_zona">
+                                <span class="marker-icon-preview nychka_zona"><i class="fa-solid fa-box-archive"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Нычка</span>
+                                    <span class="filter-count" id="count-nychka_zona">0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 2. Аномалии и нычки LV -->
+                    <div class="filter-section">
+                        <div class="section-title">
+                            <span>Аномалии и нычки LV</span>
+                        </div>
+                        <div class="filter-grid">
+                            <label class="filter-card lomot_myasa active" data-type="lomot_myasa">
+                                <input type="checkbox" checked value="lomot_myasa">
+                                <span class="marker-icon-preview lomot_myasa"><i class="fa-solid fa-drumstick-bite"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Ломоть мяса</span>
+                                    <span class="filter-count" id="count-lomot_myasa">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card alenkiy_cvetochek active" data-type="alenkiy_cvetochek">
+                                <input type="checkbox" checked value="alenkiy_cvetochek">
+                                <span class="marker-icon-preview alenkiy_cvetochek"><i class="fa-solid fa-clover"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Аленький цветочек</span>
+                                    <span class="filter-count" id="count-alenkiy_cvetochek">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card vyvert active" data-type="vyvert">
+                                <input type="checkbox" checked value="vyvert">
+                                <span class="marker-icon-preview vyvert"><i class="fa-solid fa-recycle"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Выверт</span>
+                                    <span class="filter-count" id="count-vyvert">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card kolobok active" data-type="kolobok">
+                                <input type="checkbox" checked value="kolobok">
+                                <span class="marker-icon-preview kolobok"><i class="fa-solid fa-sun"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Колобок</span>
+                                    <span class="filter-count" id="count-kolobok">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card nychka active" data-type="nychka">
+                                <input type="checkbox" checked value="nychka">
+                                <span class="marker-icon-preview nychka"><i class="fa-solid fa-box-archive"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Нычка</span>
+                                    <span class="filter-count" id="count-nychka">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card konteyner active" data-type="konteyner">
+                                <input type="checkbox" checked value="konteyner">
+                                <span class="marker-icon-preview konteyner"><i class="fa-solid fa-boxes-stacked"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Контейнер</span>
+                                    <span class="filter-count" id="count-konteyner">0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 3. Прочее -->
+                    <div class="filter-section">
+                        <div class="section-title">
+                            <span>Прочее</span>
+                        </div>
+                        <div class="filter-grid">
+                            <label class="filter-card ranenny_brodyaga active" data-type="ranenny_brodyaga">
+                                <input type="checkbox" checked value="ranenny_brodyaga">
+                                <span class="marker-icon-preview ranenny_brodyaga"><i class="fa-solid fa-user-ninja"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Раненный бродяга</span>
+                                    <span class="filter-count" id="count-ranenny_brodyaga">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card ranenny_stalker active" data-type="ranenny_stalker">
+                                <input type="checkbox" checked value="ranenny_stalker">
+                                <span class="marker-icon-preview ranenny_stalker"><i class="fa-solid fa-user-doctor"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Раненный сталкер</span>
+                                    <span class="filter-count" id="count-ranenny_stalker">0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 4. Базы Фракций -->
+                    <div class="filter-section">
+                        <div class="section-title">
+                            <span>Базы Фракций</span>
+                        </div>
+                        <div class="filter-grid">
+                            <label class="filter-card base_stalker active" data-type="base_stalker">
+                                <input type="checkbox" checked value="base_stalker">
+                                <span class="marker-icon-preview base_stalker"><i class="fa-solid fa-radiation"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">База сталкеров</span>
+                                    <span class="filter-count" id="count-base_stalker">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card base_bandit active" data-type="base_bandit">
+                                <input type="checkbox" checked value="base_bandit">
+                                <span class="marker-icon-preview base_bandit"><i class="fa-solid fa-skull-crossbones"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">База бандитов</span>
+                                    <span class="filter-count" id="count-base_bandit">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card base_mutant active" data-type="base_mutant">
+                                <input type="checkbox" checked value="base_mutant">
+                                <span class="marker-icon-preview base_mutant"><i class="fa-solid fa-paw"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">База мутантов</span>
+                                    <span class="filter-count" id="count-base_mutant">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card base_enclave active" data-type="base_enclave">
+                                <input type="checkbox" checked value="base_enclave">
+                                <span class="marker-icon-preview base_enclave"><i class="fa-solid fa-shield-halved"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Анклав</span>
+                                    <span class="filter-count" id="count-base_enclave">0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 5. Типы Зон & Менеджер Зон -->
+                    <div class="filter-section">
+                        <div class="section-title">
+                            <span>Типы Зон</span>
+                        </div>
+                        <div class="filter-grid">
+                            <label class="filter-card zone-safe active" data-type="zone_safe">
+                                <input type="checkbox" checked value="zone_safe">
+                                <span class="marker-icon-preview zone-safe"><i class="fa-solid fa-shield-heart"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Безопасная зона</span>
+                                    <span class="filter-count" id="count-zone-safe">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card zone-contested active" data-type="zone_contested">
+                                <input type="checkbox" checked value="zone_contested">
+                                <span class="marker-icon-preview zone-contested"><i class="fa-solid fa-swords"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Оспариваемая зона</span>
+                                    <span class="filter-count" id="count-zone-contested">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card zone-danger active" data-type="zone_danger">
+                                <input type="checkbox" checked value="zone_danger">
+                                <span class="marker-icon-preview zone-danger"><i class="fa-solid fa-skull"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Опасная зона</span>
+                                    <span class="filter-count" id="count-zone-danger">0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Менеджер созданных зон -->
+                    <div class="filter-section" id="zoneManagerSection">
+                        <div class="section-title">
+                            <span>Список созданных зон</span>
+                        </div>
+                        <div class="zone-manager-list" id="zoneManagerList">
+                            <p class="zone-empty-hint">Зон пока нет. Добавьте зону через админ-панель.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tools -->
+                    <div class="filter-section">
+                        <div class="section-title">
+                            <span>Инструменты Карты</span>
+                        </div>
+                        <div class="tools-buttons">
+                            <button class="tool-btn" id="btnResetView">
+                                <i class="fa-solid fa-crosshairs"></i> Сбросить масштаб
+                            </button>
+                            <button class="tool-btn" id="btnToggleLabels">
+                                <i class="fa-solid fa-tag"></i> Подписи номеров
+                            </button>
+                            <button class="tool-btn" id="btnRuler">
+                                <i class="fa-solid fa-ruler-combined"></i> Измеритель дистанции
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Authorship & Notes -->
+                    <div class="author-credits">
+                        <div class="credits-header">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Карта сервера SAMP ZONA</span>
+                        </div>
+                        <p class="credits-author">Разработчик: <strong>Akeno_Nakamura</strong></p>
+                        <p class="credits-author">Картограф: <strong>Steven_Viser</strong></p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Map Display Area -->
+            <main class="map-viewport" id="mapViewport">
+                <!-- Map Controls Overlay -->
+                <div class="map-hud-controls">
+                    <button class="hud-btn" id="zoomIn" title="Приблизить (+)"><i class="fa-solid fa-plus"></i></button>
+                    <button class="hud-btn" id="zoomOut" title="Отдалить (-)"><i class="fa-solid fa-minus"></i></button>
+                    <button class="hud-btn" id="fullScreen" title="На весь экран"><i class="fa-solid fa-expand"></i></button>
+                </div>
+
+                <!-- Coordinates HUD display -->
+                <div class="coords-hud" id="coordsHud">
+                    <span class="hud-label">SAMP:</span>
+                    <span id="coordsVal">Наведите на карту</span>
+                    <span class="hud-label zoom-label">Zoom:</span>
+                    <span id="zoomLevelVal">100%</span>
+                </div>
+
+                <!-- Admin HUD Banner -->
+                <div class="admin-hud-banner hidden" id="adminHudBanner">
+                    <div class="admin-status"><i class="fa-solid fa-pen-to-square"></i> АДМИН-ПАНЕЛЬ</div>
+                    <div class="admin-hint">Клик по карте — новая метка</div>
+                    <div class="admin-actions">
+                        <button class="admin-btn" id="btnAddZone" title="Нарисовать зону"><i class="fa-solid fa-draw-polygon"></i> + Зона</button>
+                        <button class="admin-btn" id="btnExportJson" title="Экспорт данных в JSON"><i class="fa-solid fa-download"></i> Экспорт</button>
+                        <label class="admin-btn" title="Импорт данных из JSON"><i class="fa-solid fa-upload"></i> Импорт <input type="file" id="importJsonInput" accept=".json" style="display:none"></label>
+                        <button class="admin-btn" id="btnChangePassword" title="Изменить пароль"><i class="fa-solid fa-key"></i> Пароль</button>
+                        <button class="admin-btn danger" id="btnResetMarkers" title="Полностью очистить карту от всех меток и зон"><i class="fa-solid fa-trash"></i> Очистить</button>
+                    </div>
+                </div>
+
+                <!-- Zone Drawing Mode Banner (модалка на это время закрыта, карта кликабельна) -->
+                <div class="admin-hud-banner zone-draw-banner hidden" id="zoneDrawBanner">
+                    <div class="admin-status"><i class="fa-solid fa-draw-polygon"></i> РИСОВАНИЕ ЗОНЫ</div>
+                    <div class="admin-hint">Кликайте по карте, чтобы добавить точки контура (минимум 3). Добавлено точек: <span id="zoneDrawCount">0</span></div>
+                    <div class="admin-actions">
+                        <button class="admin-btn" id="btnUndoZonePoint" title="Отменить последнюю точку"><i class="fa-solid fa-rotate-left"></i> Назад</button>
+                        <button class="admin-btn" id="btnFinishZoneDraw" title="Завершить рисование"><i class="fa-solid fa-check"></i> Готово</button>
+                        <button class="admin-btn danger" id="btnCancelZoneDraw" title="Отменить рисование"><i class="fa-solid fa-xmark"></i> Отмена</button>
+                    </div>
+                </div>
+
+                <!-- Map Canvas Container -->
+                <div class="map-container" id="mapContainer">
+                    <!-- SVG Vector Base & High Definition Map Image -->
+                    <div class="map-wrapper" id="mapWrapper">
+                        <div class="map-background-layer" id="mapBgLayer"></div>
+                        
+                        <!-- Hazard Zones Overlay Layer -->
+                        <svg class="zones-svg-layer" id="zonesSvgLayer" viewBox="0 0 3000 3000"></svg>
+
+                        <!-- Live preview of the zone currently being drawn by the admin -->
+                        <svg class="zone-draw-svg-layer" id="zoneDrawSvgLayer" viewBox="0 0 3000 3000"></svg>
+
+                        <!-- Interactive Markers Layer -->
+                        <div class="markers-layer" id="markersLayer"></div>
+
+                        <!-- Measure Lines Layer -->
+                        <svg class="ruler-svg-layer" id="rulerSvgLayer" viewBox="0 0 3000 3000"></svg>
+                    </div>
+                </div>
+
+                <!-- Selected Marker Details Floating Popup Panel -->
+                <div class="marker-details-card hidden" id="detailsCard">
+                    <button class="close-card-btn" id="closeDetails"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="card-header">
+                        <span class="card-badge" id="cardBadge">Жарка</span>
+                        <h3 id="cardTitle">Аномалия Жарка #1</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Photo Preview -->
+                        <div class="card-photo-wrap hidden" id="cardPhotoWrap">
+                            <img id="cardPhoto" src="" alt="Фото локации">
+                            <span class="photo-caption">Фото локации</span>
+                        </div>
+
+                        <div class="card-prop">
+                            <span class="prop-label">Тип объекта:</span>
+                            <span class="prop-val" id="cardType">Термическая аномалия</span>
+                        </div>
+                        <div class="card-prop">
+                            <span class="prop-label">Локация / Район:</span>
+                            <span class="prop-val" id="cardLocation">Fort Carson East</span>
+                        </div>
+                        <div class="card-prop">
+                            <span class="prop-label">Рекомендации:</span>
+                            <span class="prop-val desc" id="cardDesc">Опасайтесь температурного урона. Используйте комбинезон с теплозащитой.</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn" id="btnCopyCoords"><i class="fa-solid fa-copy"></i> Скопировать координаты</button>
+                        </div>
+                        <div class="card-admin-actions hidden" id="cardAdminActions">
+                            <button class="action-btn edit" id="btnEditMarker"><i class="fa-solid fa-pen-to-square"></i> Изменить</button>
+                            <button class="action-btn delete" id="btnDeleteMarker"><i class="fa-solid fa-trash-can"></i> Удалить</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compass / PDA Radar Decorative Element -->
+                <div class="pda-radar-hud">
+                    <div class="radar-circle">
+                        <div class="radar-line"></div>
+                        <div class="radar-blip b1"></div>
+                        <div class="radar-blip b2"></div>
+                        <div class="radar-blip b3"></div>
+                    </div>
+                    <span class="compass-north">N</span>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Dialog for Add/Edit Zone -->
+    <div class="modal-overlay hidden" id="zoneModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="zoneModalTitle"><i class="fa-solid fa-draw-polygon"></i> Редактирование зоны</h3>
+                <button class="close-card-btn" id="closeZoneModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="zoneForm" class="modal-body">
+                <input type="hidden" id="zoneId">
+                <div class="form-group">
+                    <label>Название зоны:</label>
+                    <input type="text" id="zoneName" placeholder="Например: Опасный радиационный сектор" required>
+                </div>
+                <div class="form-group">
+                    <label>Тип зоны:</label>
+                    <select id="zoneType">
+                        <option value="safe">🟢 Безопасная зона</option>
+                        <option value="contested">🟠 Оспариваемая зона</option>
+                        <option value="danger">🔴 Опасная зона</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Вариант карты (отображение):</label>
+                    <select id="zoneMapId">
+                        <option value="all">🌐 Все варианты (на всех картах)</option>
+                        <option value="map1">📍 Карта #1</option>
+                        <option value="map2">📍 Карта #2</option>
+                        <option value="map3">📍 Карта #3</option>
+                        <option value="map4">📍 Карта #4</option>
+                        <option value="map5">📍 Карта #5</option>
+                        <option value="map6">📍 Карта #6</option>
+                        <option value="map7">📍 Карта #7</option>
+                        <option value="map8">📍 Карта #8</option>
+                        <option value="map9">📍 Карта #9</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Вписать координаты SAMP для ровной прямоугольной зоны:</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label style="font-size:11px;">Точка 1 (X1, Y1):</label>
+                            <input type="text" id="rectPoint1" placeholder="Например: 1552, 528">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:11px;">Точка 2 (X2, Y2):</label>
+                            <input type="text" id="rectPoint2" placeholder="Например: 1622, 606">
+                        </div>
+                    </div>
+                    <small style="color:var(--text-muted); font-size:11px; margin-top:2px;">Или скопируйте GangZone / 4 числа целиком:</small>
+                    <input type="text" id="rectGangZoneInput" placeholder="Например: 1552.5, 528.0, 1622.5, 606.0" style="margin-top:4px;">
+                    <button type="button" class="btn-secondary" id="btnMakeRectZone" style="margin-top:8px; align-self:flex-start;"><i class="fa-solid fa-vector-square"></i> Рассчитать ровную зону</button>
+                </div>
+                <div class="form-group">
+                    <label>Координаты контура (SVG points):</label>
+                    <textarea id="zonePoints" rows="3" placeholder="Нажмите «Рисовать по карте» или «Рассчитать ровную зону»" required></textarea>
+                    <button type="button" class="btn-secondary" id="btnRedrawZone" style="align-self:flex-start;"><i class="fa-solid fa-draw-polygon"></i> Рисовать по карте</button>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary danger" id="btnDeleteZone" style="display:none; color:#ff4757; border-color:#ff4757; margin-right:auto;">Удалить</button>
+                    <button type="button" class="btn-secondary" id="btnCancelZoneModal">Отмена</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Сохранить зону</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Dialog for Add/Edit Marker -->
+    <div class="modal-overlay hidden" id="markerModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fa-solid fa-location-dot"></i> Добавление новой метки</h3>
+                <button class="close-card-btn" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="markerForm" class="modal-body">
+                <input type="hidden" id="markerId">
+                <div class="form-group">
+                    <label>Название метки:</label>
+                    <input type="text" id="markerName" placeholder="Например: Жарка #8 или Нычка #12" required>
+                </div>
+                <div class="form-group">
+                    <label>Вариант карты (отображение):</label>
+                    <select id="markerMapId">
+                        <option value="all">🌐 Все варианты (на всех картах)</option>
+                        <option value="map1">📍 Карта #1</option>
+                        <option value="map2">📍 Карта #2</option>
+                        <option value="map3">📍 Карта #3</option>
+                        <option value="map4">📍 Карта #4</option>
+                        <option value="map5">📍 Карта #5</option>
+                        <option value="map6">📍 Карта #6</option>
+                        <option value="map7">📍 Карта #7</option>
+                        <option value="map8">📍 Карта #8</option>
+                        <option value="map9">📍 Карта #9</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Тип объекта:</label>
+                    <select id="markerType">
+                        <optgroup label="Аномалии и нычки зоны">
+                            <option value="zharka">🔥 Жарка</option>
+                            <option value="gazirovka">🧪 Газировка</option>
+                            <option value="elektra">⚡ Электра</option>
+                            <option value="tramplin">🌀 Трамплин</option>
+                            <option value="medusa">🔮 Медуза</option>
+                            <option value="voda">💧 Вода</option>
+                            <option value="luna">🌙 Луна</option>
+                            <option value="nychka_zona">📦 Нычка</option>
+                        </optgroup>
+                        <optgroup label="Аномалии и нычки LV">
+                            <option value="lomot_myasa">🥩 Ломоть мяса</option>
+                            <option value="alenkiy_cvetochek">🌺 Аленький цветочек</option>
+                            <option value="vyvert">🌀 Выверт</option>
+                            <option value="kolobok">🟡 Колобок</option>
+                            <option value="nychka">📦 Нычка</option>
+                            <option value="konteyner">🧰 Контейнер</option>
+                        </optgroup>
+                        <optgroup label="Прочее">
+                            <option value="ranenny_brodyaga">🤕 Раненный бродяга</option>
+                            <option value="ranenny_stalker">🩸 Раненный сталкер</option>
+                        </optgroup>
+                        <optgroup label="Базы Фракций">
+                            <option value="base_stalker">☢️ База сталкеров</option>
+                            <option value="base_bandit">☠️ База бандитов</option>
+                            <option value="base_mutant">🐾 База мутантов</option>
+                            <option value="base_enclave">🛡️ Анклав</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Локация / Район:</label>
+                    <input type="text" id="markerLocation" placeholder="Например: Las Venturas / Bone County" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Координата X (SAMP):</label>
+                        <input type="number" step="any" id="markerX" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Координата Y (SAMP):</label>
+                        <input type="number" step="any" id="markerY" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Описание и подсказки:</label>
+                    <textarea id="markerDesc" rows="3" placeholder="Описание аномалии, лута или артефактов..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Фото локации:</label>
+                    <div class="img-upload-area" id="imgUploadArea">
+                        <div class="img-upload-placeholder" id="imgUploadPlaceholder">
+                            <i class="fa-solid fa-image"></i>
+                            <span>Нажмите или перетащите скриншот</span>
+                            <small>JPG, PNG, WEBP — до 5 МБ</small>
+                        </div>
+                        <img class="img-upload-preview hidden" id="imgUploadPreview" src="" alt="">
+                        <button type="button" class="img-remove-btn hidden" id="imgRemoveBtn"><i class="fa-solid fa-xmark"></i></button>
+                        <input type="file" id="markerImageInput" accept="image/*" style="display:none">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelModal">Отмена</button>
+                    <button type="submit" class="btn-primary" id="btnSaveMarker"><i class="fa-solid fa-check"></i> Сохранить метку</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Dialog for Admin / Moderator Authorization -->
+    <div class="modal-overlay hidden" id="adminAuthModal">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-lock"></i> Авторизация Доступа</h3>
+                <button class="modal-close" id="closeAdminAuthModal">&times;</button>
+            </div>
+            <form id="adminAuthForm">
+                <div class="form-group">
+                    <label>Введите пароль доступа:</label>
+                    <input type="password" id="adminPasswordInput" placeholder="Пароль доступа" required autocomplete="current-password">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelAdminAuth">Отмена</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-right-to-bracket"></i> Войти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Dialog for Change Password -->
+    <div class="modal-overlay hidden" id="changePasswordModal">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-key"></i> Сменить пароль</h3>
+                <button class="modal-close" id="closeChangePasswordModal">&times;</button>
+            </div>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label>Какую роль изменить:</label>
+                    <select id="changeRoleSelect">
+                        <option value="admin">Пароль Администратора</option>
+                        <option value="moderator">Пароль Модератора</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Текущий пароль выбранной роли:</label>
+                    <input type="password" id="currPasswordInput" placeholder="Текущий пароль" required>
+                </div>
+                <div class="form-group">
+                    <label>Новый пароль:</label>
+                    <input type="password" id="newPasswordInput" placeholder="Новый пароль" required minlength="3">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelChangePassword">Отмена</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

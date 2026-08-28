@@ -1,0 +1,50 @@
+{
+  "version": "1787912407347",
+  "markers": [
+    {
+      "id": "custom-1787912291486",
+      "mapId": "all",
+      "type": "base_bandit",
+      "name": "База бандитов",
+      "location": "Малина",
+      "x": 1105,
+      "y": 288,
+      "desc": "Место базирования бандитов",
+      "photo": null
+    },
+    {
+      "id": "custom-1787912319628",
+      "mapId": "all",
+      "type": "base_enclave",
+      "name": "Анклав",
+      "location": "Анклав",
+      "x": 1590,
+      "y": 559,
+      "desc": "Место базирования ученых, военных и псиопсов",
+      "photo": null
+    },
+    {
+      "id": "custom-1787912345560",
+      "mapId": "map1",
+      "type": "base_mutant",
+      "name": "База мутантов",
+      "location": "Радар",
+      "x": 1328,
+      "y": 708,
+      "desc": "Место базирования зараженных",
+      "photo": null
+    },
+    {
+      "id": "custom-1787912375736",
+      "mapId": "all",
+      "type": "base_stalker",
+      "name": "База сталкеров",
+      "location": "Заброшенный аэродром",
+      "x": 1708,
+      "y": 232,
+      "desc": "Место базирования сталкеров",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787912400/nsiqgddblgnvp8ungzti.png"
+    }
+  ],
+  "zones": []
+}
