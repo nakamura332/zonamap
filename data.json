@@ -1,5 +1,5 @@
 {
-  "version": "1787916418040",
+  "version": "1787917516324",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -66,6 +66,28 @@
       "y": 385,
       "desc": "Описание точки, артефактов или секретного лута.",
       "photo": null
+    },
+    {
+      "id": "custom-1787917018209",
+      "mapId": "map1",
+      "type": "zharka",
+      "name": "Новая метка #7",
+      "location": "Zone Sector",
+      "x": 1513,
+      "y": 251,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787917014/fy82hl41imkmr5kzbnry.png"
+    },
+    {
+      "id": "custom-1787917383193",
+      "mapId": "map1",
+      "type": "zharka",
+      "name": "Новая метка #8",
+      "location": "Zone Sector",
+      "x": 1534,
+      "y": 253,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787917382/phs8d9rgzh3ormfmxrbp.png"
     }
   ],
   "zones": []
