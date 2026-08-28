@@ -1,5 +1,5 @@
 {
-  "version": "1787912407347",
+  "version": "1787916418040",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -25,7 +25,7 @@
     },
     {
       "id": "custom-1787912345560",
-      "mapId": "map1",
+      "mapId": "all",
       "type": "base_mutant",
       "name": "База мутантов",
       "location": "Радар",
@@ -44,6 +44,28 @@
       "y": 232,
       "desc": "Место базирования сталкеров",
       "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787912400/nsiqgddblgnvp8ungzti.png"
+    },
+    {
+      "id": "custom-1787916226888",
+      "mapId": "all",
+      "type": "nychka_zona",
+      "name": "Нычка",
+      "location": "Боун",
+      "x": 1371,
+      "y": 110,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": null
+    },
+    {
+      "id": "custom-1787916367004",
+      "mapId": "all",
+      "type": "nychka_zona",
+      "name": "Нычка",
+      "location": "Бруджас",
+      "x": 1313,
+      "y": 385,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": null
     }
   ],
   "zones": []
