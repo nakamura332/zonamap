@@ -1,5 +1,5 @@
 {
-  "version": "1787917516324",
+  "version": "1787926442762",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -68,26 +68,235 @@
       "photo": null
     },
     {
-      "id": "custom-1787917018209",
-      "mapId": "map1",
-      "type": "zharka",
-      "name": "Новая метка #7",
-      "location": "Zone Sector",
-      "x": 1513,
-      "y": 251,
-      "desc": "Описание точки, артефактов или секретного лута.",
-      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787917014/fy82hl41imkmr5kzbnry.png"
+      "id": "custom-1787917850460",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Рейнджеры",
+      "x": 502,
+      "y": 223,
+      "desc": "Сталкер находится внутри туннеля, рядом с базой рейнджеров | 2434 Дистанция от базы сталкеров.",
+      "photo": null
     },
     {
-      "id": "custom-1787917383193",
+      "id": "custom-1787918013902",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер #2",
+      "location": "Радар",
+      "x": 1260,
+      "y": 736,
+      "desc": "Сталкер находится в туннеле под радаром | Дистанция от базы сталкеров - 1395",
+      "photo": null
+    },
+    {
+      "id": "custom-1787918088232",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер #3",
+      "location": "Робада",
+      "x": 1139,
+      "y": 728,
+      "desc": "Раненный сталкер находится на горе в Робаде | Дистанция от базы сталкеров - 1519",
+      "photo": null
+    },
+    {
+      "id": "custom-1787918211130",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер #4",
+      "location": "Рудник",
+      "x": 1801,
+      "y": 1086,
+      "desc": "Раненный сталкер находится на транспортёре | Дистанция от базы сталкеров - 1722",
+      "photo": null
+    },
+    {
+      "id": "custom-1787918324051",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер #5",
+      "location": "Пустошь",
+      "x": 1450,
+      "y": 1505,
+      "desc": "Раненный сталкер находится на чердаке сарая | Дистанция от базы сталкеров - 2632",
+      "photo": null
+    },
+    {
+      "id": "custom-1787918599235",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Пустошь",
+      "x": 1451,
+      "y": 2010,
+      "desc": "Раненный сталкер находится под мостом возле вайнвуда | Дистанция от базы сталкеров - 3604",
+      "photo": null
+    },
+    {
+      "id": "custom-1787918765960",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Пустошь/Ферма",
+      "x": 1215,
+      "y": 2046,
+      "desc": "Раненный сталкер находится у домиков под фермой | Дистанция от базы сталкеров - 3736",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924393970",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Пустошь/Ферма",
+      "x": 788,
+      "y": 1977,
+      "desc": "На мельнице рядом с фермой | Дистанция от базы сталкеров - 3966",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924518151",
       "mapId": "map1",
-      "type": "zharka",
-      "name": "Новая метка #8",
-      "location": "Zone Sector",
-      "x": 1534,
-      "y": 253,
-      "desc": "Описание точки, артефактов или секретного лута.",
-      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787917382/phs8d9rgzh3ormfmxrbp.png"
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Пустошь/Ангел Пайн",
+      "x": 687,
+      "y": 2620,
+      "desc": "В домике на Ангел Пайне | Дистанция от базы сталкеров - 5195",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924657462",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Лас-Вентурас",
+      "x": 2368,
+      "y": 446,
+      "desc": "Раненный сталкер находится Под мостом | Дистанция от базы сталкеров - 1425",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924729956",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Лас-Вентурас",
+      "x": 2297,
+      "y": 441,
+      "desc": "Раненный сталкер находится в домике | Дистанция от базы сталкеров - 1241",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924785685",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Лас-Вентурас",
+      "x": 2276,
+      "y": 552,
+      "desc": "Раненный сталкер находится в СТО | Дистанция от базы сталкеров - 1272",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924905494",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Лас-Вентурас/Радио",
+      "x": 2216,
+      "y": 739,
+      "desc": "Раненный сталкер находится под контейнером у радио | Дистанция от базы сталкеров - 1387",
+      "photo": null
+    },
+    {
+      "id": "custom-1787924995482",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Лас-Вентурас/Радио",
+      "x": 2141,
+      "y": 821,
+      "desc": "Раненный сталкер находится в Ангаре | Дистанция от базы сталкеров - 1458",
+      "photo": null
+    },
+    {
+      "id": "custom-1787925205645",
+      "mapId": "all",
+      "type": "ranenny_stalker",
+      "name": "Раненный сталкер",
+      "location": "Зона/Зарница",
+      "x": 931,
+      "y": 376,
+      "desc": "Раненный сталкер находится рядом с зарницой | Дистанция от базы сталкеров - 1554",
+      "photo": null
+    },
+    {
+      "id": "custom-1787925562896",
+      "mapId": "all",
+      "type": "ranenny_brodyaga",
+      "name": "Раненный бродяга",
+      "location": "Пустошь",
+      "x": 1213,
+      "y": 1591,
+      "desc": "Раненный бродяга находится в лесу в заброжке",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787925562/ozphqkwi6ooocdcri8kr.jpg"
+    },
+    {
+      "id": "custom-1787925701826",
+      "mapId": "all",
+      "type": "ranenny_brodyaga",
+      "name": "Раненный бродяга",
+      "location": "Пустошь",
+      "x": 1436,
+      "y": 1637,
+      "desc": "Раненный бродяга находится рядом с Алкозаводом",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787925701/wzg73rpucy5hhf31asic.jpg"
+    },
+    {
+      "id": "custom-1787925797074",
+      "mapId": "all",
+      "type": "ranenny_brodyaga",
+      "name": "Раненный бродяга",
+      "location": "Пустошь",
+      "x": 1519,
+      "y": 1826,
+      "desc": "Раненный бродяга находится под мостом",
+      "photo": null
+    },
+    {
+      "id": "custom-1787926203506",
+      "mapId": "all",
+      "type": "ranenny_brodyaga",
+      "name": "Раненный бродяга",
+      "location": "Пустошь",
+      "x": 1436,
+      "y": 2013,
+      "desc": "Находится на жд.Под мостом",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787926203/iom34kq6zuphckdzveeo.jpg"
+    },
+    {
+      "id": "custom-1787926283092",
+      "mapId": "all",
+      "type": "ranenny_brodyaga",
+      "name": "Раненный бродяга",
+      "location": "Пустошь",
+      "x": 1063,
+      "y": 2027,
+      "desc": "В тоннеле",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787926320/p7q9mbwza0rqhbfrta2n.jpg"
+    },
+    {
+      "id": "custom-1787926378850",
+      "mapId": "all",
+      "type": "ranenny_brodyaga",
+      "name": "Раненный бродяга",
+      "location": "Пустошь",
+      "x": 1305,
+      "y": 1920,
+      "desc": "Раненный бродяга находится под мостом",
+      "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787926378/tdctefjh4h4esqtkkoee.jpg"
     }
   ],
   "zones": []
