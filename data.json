@@ -1,5 +1,5 @@
 {
-  "version": "1787927317280",
+  "version": "1787942378938",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -297,6 +297,336 @@
       "y": 1920,
       "desc": "Раненный бродяга находится под мостом",
       "photo": "https://res.cloudinary.com/z7zrvru6/image/upload/v1787926378/tdctefjh4h4esqtkkoee.jpg"
+    },
+    {
+      "id": "custom-1787940035152",
+      "mapId": "all",
+      "type": "konteyner",
+      "name": "Контейнер",
+      "location": "Лас-Вентурас",
+      "x": 2260,
+      "y": 370,
+      "desc": "Контейнер падает на парковку стадиона",
+      "photo": null
+    },
+    {
+      "id": "custom-1787940094905",
+      "mapId": "all",
+      "type": "konteyner",
+      "name": "Контейнер",
+      "location": "Лас-Вентурас",
+      "x": 2343,
+      "y": 519,
+      "desc": "Контейнер падает на заброшенное здание рядом с СТО",
+      "photo": null
+    },
+    {
+      "id": "custom-1787940157191",
+      "mapId": "all",
+      "type": "konteyner",
+      "name": "Контейнер",
+      "location": "Лас-Вентурас",
+      "x": 2262,
+      "y": 696,
+      "desc": "Контейнер падает рядом с посадочной полосой",
+      "photo": null
+    },
+    {
+      "id": "custom-1787940204835",
+      "mapId": "all",
+      "type": "konteyner",
+      "name": "Контейнер",
+      "location": "Лас-Вентурас",
+      "x": 2190,
+      "y": 968,
+      "desc": "Контейнер падает за базой Монолита",
+      "photo": null
+    },
+    {
+      "id": "custom-1787940255279",
+      "mapId": "all",
+      "type": "konteyner",
+      "name": "Контейнер",
+      "location": "Лас-Вентурас",
+      "x": 2338,
+      "y": 1005,
+      "desc": "Контейнер падает на парковку за Ангаром Джаггернаута",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941197618",
+      "mapId": "all",
+      "type": "lomot_myasa",
+      "name": "Ломоть Мяса",
+      "location": "Лас-Вентурас",
+      "x": 2327,
+      "y": 345,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941235684",
+      "mapId": "all",
+      "type": "kolobok",
+      "name": "Колобок",
+      "location": "Лас-Вентурас",
+      "x": 2291,
+      "y": 352,
+      "desc": "Артефакт находится на контейнера",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941359226",
+      "mapId": "all",
+      "type": "alenkiy_cvetochek",
+      "name": "Аленький цветочек",
+      "location": "Лас-Вентурас",
+      "x": 2341,
+      "y": 432,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941386956",
+      "mapId": "all",
+      "type": "vyvert",
+      "name": "Выверт",
+      "location": "Лас-Вентурас",
+      "x": 2405,
+      "y": 445,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941417036",
+      "mapId": "all",
+      "type": "vyvert",
+      "name": "Выверт",
+      "location": "Лас-Вентурас",
+      "x": 2150,
+      "y": 460,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941453420",
+      "mapId": "all",
+      "type": "lomot_myasa",
+      "name": "Ломоть мяса",
+      "location": "Лас-Вентурас",
+      "x": 2270,
+      "y": 503,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941501722",
+      "mapId": "all",
+      "type": "lomot_myasa",
+      "name": "Ломоть мяса",
+      "location": "Лас-Вентурас",
+      "x": 2341,
+      "y": 534,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941543474",
+      "mapId": "all",
+      "type": "kolobok",
+      "name": "Колобок",
+      "location": "Лас-Вентурас",
+      "x": 2182,
+      "y": 592,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941565016",
+      "mapId": "all",
+      "type": "kolobok",
+      "name": "Колобок",
+      "location": "Лас-Вентурас",
+      "x": 2304,
+      "y": 595,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941613455",
+      "mapId": "all",
+      "type": "alenkiy_cvetochek",
+      "name": "Аленький Цветочек",
+      "location": "Лас-Вентурас",
+      "x": 2217,
+      "y": 753,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941647402",
+      "mapId": "all",
+      "type": "vyvert",
+      "name": "Выверт",
+      "location": "Лас-Вентурас",
+      "x": 2304,
+      "y": 775,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941671931",
+      "mapId": "all",
+      "type": "kolobok",
+      "name": "Колобок",
+      "location": "Лас-Вентурас",
+      "x": 2304,
+      "y": 787,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941714842",
+      "mapId": "all",
+      "type": "lomot_myasa",
+      "name": "Ломоть мяса",
+      "location": "Лас-Вентурас",
+      "x": 2153,
+      "y": 820,
+      "desc": "Артефакт находится внутри ангара",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941746314",
+      "mapId": "all",
+      "type": "alenkiy_cvetochek",
+      "name": "Аленький цветочек",
+      "location": "Лас-Вентурас",
+      "x": 2059,
+      "y": 862,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941775316",
+      "mapId": "all",
+      "type": "vyvert",
+      "name": "Выверт",
+      "location": "Лас-Вентурас",
+      "x": 2145,
+      "y": 916,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941812494",
+      "mapId": "all",
+      "type": "alenkiy_cvetochek",
+      "name": "Аленький цветочек",
+      "location": "Лас-Вентурас",
+      "x": 2355,
+      "y": 979,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787941835200",
+      "mapId": "all",
+      "type": "lomot_myasa",
+      "name": "Ломоть мяса",
+      "location": "Лас-Вентурас",
+      "x": 2359,
+      "y": 991,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942041886",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2286,
+      "y": 432,
+      "desc": "Искать в гараже дома, чёрнам сумочка",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942075822",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2339,
+      "y": 443,
+      "desc": "Искать в гараже дома, чёрнам сумочка",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942138523",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2390,
+      "y": 450,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942164086",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2213,
+      "y": 502,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942185810",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2257,
+      "y": 502,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942230408",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2181,
+      "y": 553,
+      "desc": "Искать в гараже дома, чёрная сумочка",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942267467",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2317,
+      "y": 951,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": null
+    },
+    {
+      "id": "custom-1787942282302",
+      "mapId": "all",
+      "type": "nychka",
+      "name": "Нычка сиплого",
+      "location": "Лас-Вентурас",
+      "x": 2354,
+      "y": 952,
+      "desc": "",
+      "photo": null
     }
   ],
   "zones": []
