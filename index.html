@@ -68,6 +68,14 @@
 
         <!-- Main Workspace -->
         <div class="main-workspace">
+            <!-- Floating button to re-open the sidebar once it's collapsed -->
+            <button class="open-sidebar-btn hidden" id="openSidebarBtn" title="Показать панель фильтров">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+
+            <!-- Backdrop shown behind the sidebar on mobile -->
+            <div class="sidebar-backdrop hidden" id="sidebarBackdrop"></div>
+
             <!-- Sidebar Panel -->
             <aside class="sidebar" id="sidebar">
                 <div class="sidebar-header">
@@ -219,6 +227,24 @@
                                     <span class="filter-count" id="count-konteyner">0</span>
                                 </div>
                             </label>
+
+                            <label class="filter-card tochka_skanirovaniya active" data-type="tochka_skanirovaniya">
+                                <input type="checkbox" checked value="tochka_skanirovaniya">
+                                <span class="marker-icon-preview tochka_skanirovaniya"><i class="fa-solid fa-satellite-dish"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Точка сканирования</span>
+                                    <span class="filter-count" id="count-tochka_skanirovaniya">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card zolotaya_rybka active" data-type="zolotaya_rybka">
+                                <input type="checkbox" checked value="zolotaya_rybka">
+                                <span class="marker-icon-preview zolotaya_rybka"><i class="fa-solid fa-fish"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Золотая рыбка</span>
+                                    <span class="filter-count" id="count-zolotaya_rybka">0</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
@@ -243,6 +269,24 @@
                                 <div class="filter-info">
                                     <span class="filter-name">Раненный сталкер</span>
                                     <span class="filter-count" id="count-ranenny_stalker">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card ranenaya_zhertva active" data-type="ranenaya_zhertva">
+                                <input type="checkbox" checked value="ranenaya_zhertva">
+                                <span class="marker-icon-preview ranenaya_zhertva"><i class="fa-solid fa-user-injured"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Раненая жертва</span>
+                                    <span class="filter-count" id="count-ranenaya_zhertva">0</span>
+                                </div>
+                            </label>
+
+                            <label class="filter-card mesto_lovli_ryby active" data-type="mesto_lovli_ryby">
+                                <input type="checkbox" checked value="mesto_lovli_ryby">
+                                <span class="marker-icon-preview mesto_lovli_ryby"><i class="fa-solid fa-fish-fins"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Место ловли рыбы</span>
+                                    <span class="filter-count" id="count-mesto_lovli_ryby">0</span>
                                 </div>
                             </label>
                         </div>
@@ -593,10 +637,14 @@
                             <option value="kolobok">🟡 Колобок</option>
                             <option value="nychka">📦 Нычка</option>
                             <option value="konteyner">🧰 Контейнер</option>
+                            <option value="tochka_skanirovaniya">📡 Точка сканирования</option>
+                            <option value="zolotaya_rybka">🐠 Золотая рыбка</option>
                         </optgroup>
                         <optgroup label="Прочее">
                             <option value="ranenny_brodyaga">🤕 Раненный бродяга</option>
                             <option value="ranenny_stalker">🩸 Раненный сталкер</option>
+                            <option value="ranenaya_zhertva">🚑 Раненая жертва</option>
+                            <option value="mesto_lovli_ryby">🎣 Место ловли рыбы</option>
                         </optgroup>
                         <optgroup label="Базы Фракций">
                             <option value="base_stalker">☢️ База сталкеров</option>

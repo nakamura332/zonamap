@@ -286,6 +286,49 @@ body, html {
     margin-left: calc(-1 * var(--sidebar-width));
 }
 
+/* Floating button that reopens the sidebar once it has been collapsed */
+.open-sidebar-btn {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    background: rgba(17, 23, 34, 0.92);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    z-index: 95;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 12px var(--primary-glow);
+    transition: all 0.2s ease;
+}
+
+.open-sidebar-btn:hover {
+    background: var(--primary-color);
+    color: #000;
+}
+
+.open-sidebar-btn.hidden {
+    display: none;
+}
+
+/* Backdrop behind the sidebar when it's opened as a drawer on mobile */
+.sidebar-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 85;
+}
+
+.sidebar-backdrop.hidden {
+    display: none;
+}
+
 .sidebar-header {
     padding: 16px;
     border-bottom: 1px solid var(--border-color);
@@ -426,9 +469,13 @@ body, html {
 .marker-icon-preview.nychka { background: var(--color-cache); }
 .marker-icon-preview.nychka_zona { background: #20bf6b; color: #000; box-shadow: 0 0 8px rgba(32, 191, 107, 0.5); }
 .marker-icon-preview.konteyner { background: #54a0ff; color: #fff; box-shadow: 0 0 8px rgba(84, 160, 255, 0.4); }
+.marker-icon-preview.tochka_skanirovaniya { background: #7158e2; color: #fff; box-shadow: 0 0 8px rgba(113, 88, 226, 0.4); }
+.marker-icon-preview.zolotaya_rybka { background: #ffb142; color: #000; box-shadow: 0 0 8px rgba(255, 177, 66, 0.4); }
 
 .marker-icon-preview.ranenny_brodyaga { background: #576574; color: #ffdd59; box-shadow: 0 0 8px rgba(87, 101, 116, 0.4); }
 .marker-icon-preview.ranenny_stalker { background: #8395a7; color: #ff4d4d; box-shadow: 0 0 8px rgba(131, 149, 167, 0.4); }
+.marker-icon-preview.ranenaya_zhertva { background: #c0392b; color: #fff; box-shadow: 0 0 8px rgba(192, 57, 43, 0.4); }
+.marker-icon-preview.mesto_lovli_ryby { background: #0abde3; color: #000; box-shadow: 0 0 8px rgba(10, 189, 227, 0.4); }
 
 .marker-icon-preview.zone { background: rgba(255, 153, 0, 0.2); border: 1px dashed var(--amber-color); color: var(--amber-color); }
 .marker-icon-preview.zone-safe { background: rgba(46, 204, 113, 0.2); border: 1px dashed #2ecc71; color: #2ecc71; }
@@ -984,20 +1031,211 @@ body, html {
     color: var(--green-stalker);
 }
 
-/* Mobile Responsiveness */
+/* ==========================================================================
+   MOBILE RESPONSIVENESS
+   ========================================================================== */
 @media (max-width: 768px) {
-    .top-controls {
+    html, body {
+        /* Prevent double-tap zoom / rubber-banding from fighting our own pan-zoom engine */
+        touch-action: manipulation;
+    }
+
+    :root {
+        --header-height: auto;
+    }
+
+    .top-nav {
+        height: auto;
+        flex-wrap: wrap;
+        align-items: center;
         gap: 8px;
+        padding: 10px 12px;
     }
-    .search-box {
-        width: 160px;
+
+    .brand {
+        gap: 8px;
+        flex: 1 1 auto;
+        min-width: 0;
     }
-    .quick-stats {
+
+    .brand-icon {
+        font-size: 18px;
+    }
+
+    .brand-text h1 {
+        font-size: 12px;
+    }
+
+    .brand-text h1 span {
         display: none;
     }
+
+    .subtitle {
+        display: none;
+    }
+
+    .top-controls {
+        width: 100%;
+        gap: 8px;
+        flex-wrap: wrap;
+        order: 3;
+    }
+
+    .search-box {
+        width: 100%;
+        order: 1;
+        flex: 1 1 100%;
+    }
+
+    .quick-stats {
+        display: flex;
+        order: 3;
+        gap: 6px;
+    }
+
+    .stat-badge {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+
+    .map-version-selector {
+        order: 4;
+        font-size: 11px;
+        padding: 0 6px;
+    }
+
+    .view-mode-selector {
+        order: 5;
+        flex: 1 1 auto;
+    }
+
+    .mode-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    .mode-btn span, .mode-btn {
+        white-space: nowrap;
+    }
+
+    .admin-toggle-btn {
+        order: 6;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .admin-toggle-btn span {
+        display: none;
+    }
+
+    /* Sidebar becomes a full-height slide-in drawer above the map */
     .sidebar {
         position: absolute;
-        height: calc(100vh - var(--header-height));
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: min(85vw, 320px);
+        z-index: 95;
+        transition: transform 0.3s ease;
+        transform: translateX(0);
+        margin-left: 0;
+    }
+
+    .sidebar.collapsed {
+        margin-left: 0;
+        transform: translateX(-105%);
+    }
+
+    .open-sidebar-btn {
+        top: 12px;
+    }
+
+    /* Map HUD & controls shrink and reposition to stay reachable with a thumb */
+    .map-hud-controls {
+        top: auto;
+        bottom: 90px;
+        right: 12px;
+        gap: 6px;
+    }
+
+    .hud-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 16px;
+    }
+
+    .coords-hud {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: auto;
+        font-size: 10px;
+        padding: 6px 10px;
+        justify-content: space-between;
+    }
+
+    /* Marker details become a bottom sheet instead of a floating card */
+    .marker-details-card {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        width: auto;
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+
+    /* Admin HUD banner wraps and scrolls its actions horizontally */
+    .admin-hud-banner {
+        top: 8px;
+        max-width: calc(100% - 20px);
+        flex-wrap: wrap;
+        justify-content: center;
+        white-space: normal;
+        padding: 8px 12px;
+    }
+
+    .admin-hint {
+        display: none;
+    }
+
+    .admin-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .admin-btn {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+
+    /* Modals become near-fullscreen and scroll internally */
+    .modal-card {
+        width: 95vw;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .zone-draw-banner, .zone-draw-toolbar {
+        max-width: calc(100% - 20px);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
     }
 }
 

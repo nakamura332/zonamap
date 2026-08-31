@@ -59,10 +59,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         kolobok:           { name: 'Колобок', icon: '<i class="fa-solid fa-sun"></i>' },
         nychka:            { name: 'Нычка', icon: '<i class="fa-solid fa-box-archive"></i>' },
         konteyner:         { name: 'Контейнер', icon: '<i class="fa-solid fa-boxes-stacked"></i>' },
+        tochka_skanirovaniya: { name: 'Точка сканирования', icon: '<i class="fa-solid fa-satellite-dish"></i>' },
+        zolotaya_rybka:    { name: 'Золотая рыбка', icon: '<i class="fa-solid fa-fish"></i>' },
 
         // Прочее
         ranenny_brodyaga:   { name: 'Раненный бродяга', icon: '<i class="fa-solid fa-user-ninja"></i>' },
         ranenny_stalker:   { name: 'Раненный сталкер', icon: '<i class="fa-solid fa-user-doctor"></i>' },
+        ranenaya_zhertva:  { name: 'Раненая жертва', icon: '<i class="fa-solid fa-user-injured"></i>' },
+        mesto_lovli_ryby:  { name: 'Место ловли рыбы', icon: '<i class="fa-solid fa-fish-fins"></i>' },
 
         // Базы Фракций
         base_stalker:      { name: 'База сталкеров', icon: '<i class="fa-solid fa-radiation"></i>' },
@@ -510,6 +514,102 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         updateTransform();
     }, { passive: false });
+
+    // ----------------------------------------------------------------------
+    // 6b. TOUCH SUPPORT (mobile pan / pinch-to-zoom)
+    // ----------------------------------------------------------------------
+    let touchMode = null; // 'pan' | 'pinch' | null
+    let touchMoved = false;
+    let pinchStartDist = 0;
+    let pinchStartScale = 1;
+    let pinchCenter = { x: 0, y: 0 };
+
+    function touchDistance(t0, t1) {
+        return Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+    }
+    function touchMidpoint(t0, t1, rect) {
+        return {
+            x: (t0.clientX + t1.clientX) / 2 - rect.left,
+            y: (t0.clientY + t1.clientY) / 2 - rect.top
+        };
+    }
+    function applyZoomAt(anchorX, anchorY, newScale) {
+        newScale = Math.min(Math.max(newScale, 0.2), 3.0);
+        currentX = anchorX - (anchorX - currentX) * (newScale / currentScale);
+        currentY = anchorY - (anchorY - currentY) * (newScale / currentScale);
+        currentScale = newScale;
+        updateTransform();
+    }
+
+    mapViewport.addEventListener('touchstart', (e) => {
+        if (e.target.closest('.map-marker') || e.target.closest('.hud-btn') || e.target.closest('.marker-details-card') || e.target.closest('.admin-hud-banner') || e.target.closest('.modal-overlay')) {
+            touchMode = null;
+            return;
+        }
+
+        touchMoved = false;
+
+        if (e.touches.length === 1) {
+            touchMode = 'pan';
+            dragStartX = e.touches[0].clientX - currentX;
+            dragStartY = e.touches[0].clientY - currentY;
+        } else if (e.touches.length === 2) {
+            touchMode = 'pinch';
+            const rect = mapViewport.getBoundingClientRect();
+            pinchStartDist = touchDistance(e.touches[0], e.touches[1]);
+            pinchStartScale = currentScale;
+            pinchCenter = touchMidpoint(e.touches[0], e.touches[1], rect);
+        }
+    }, { passive: true });
+
+    mapViewport.addEventListener('touchmove', (e) => {
+        if (!touchMode) return;
+        e.preventDefault();
+        touchMoved = true;
+
+        if (touchMode === 'pan' && e.touches.length === 1) {
+            currentX = e.touches[0].clientX - dragStartX;
+            currentY = e.touches[0].clientY - dragStartY;
+            updateTransform();
+        } else if (touchMode === 'pinch' && e.touches.length === 2) {
+            const rect = mapViewport.getBoundingClientRect();
+            const dist = touchDistance(e.touches[0], e.touches[1]);
+            const mid = touchMidpoint(e.touches[0], e.touches[1], rect);
+            const newScale = pinchStartScale * (dist / Math.max(pinchStartDist, 1));
+            applyZoomAt(mid.x, mid.y, newScale);
+            pinchCenter = mid;
+        }
+    }, { passive: false });
+
+    mapViewport.addEventListener('touchend', (e) => {
+        // Tapping (no movement) in admin mode places a marker / zone point,
+        // mirroring the desktop click-to-add behaviour.
+        if (touchMode === 'pan' && !touchMoved && isAdminMode && e.changedTouches.length === 1) {
+            const t = e.changedTouches[0];
+            const rect = mapViewport.getBoundingClientRect();
+            const tapX = Math.round((t.clientX - rect.left - currentX) / currentScale);
+            const tapY = Math.round((t.clientY - rect.top - currentY) / currentScale);
+
+            if (tapX >= 0 && tapX <= 3000 && tapY >= 0 && tapY <= 3000) {
+                if (isDrawingZone) {
+                    drawZonePoints.push([tapX, tapY]);
+                    renderZoneDrawPreview();
+                } else {
+                    openAddMarkerModal(tapX, tapY);
+                }
+            }
+        }
+
+        if (e.touches.length === 0) {
+            touchMode = null;
+            touchMoved = false;
+        } else if (e.touches.length === 1) {
+            // Went from pinch back down to one finger — restart panning cleanly.
+            touchMode = 'pan';
+            dragStartX = e.touches[0].clientX - currentX;
+            dragStartY = e.touches[0].clientY - currentY;
+        }
+    }, { passive: true });
 
     // ----------------------------------------------------------------------
     // 7. MARKER DETAILS PANEL
@@ -1090,7 +1190,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     const sidebar = document.getElementById('sidebar');
-    document.getElementById('toggleSidebar').addEventListener('click', () => sidebar.classList.toggle('collapsed'));
+    const openSidebarBtn = document.getElementById('openSidebarBtn');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    function isMobileViewport() {
+        return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function setSidebarOpen(open) {
+        sidebar.classList.toggle('collapsed', !open);
+        openSidebarBtn.classList.toggle('hidden', open);
+        // Backdrop is only meaningful on mobile (CSS keeps it invisible/inert on desktop),
+        // but we still toggle it consistently so it's ready if the viewport resizes.
+        sidebarBackdrop.classList.toggle('hidden', !(open && isMobileViewport()));
+    }
+
+    document.getElementById('toggleSidebar').addEventListener('click', () => setSidebarOpen(false));
+    openSidebarBtn.addEventListener('click', () => setSidebarOpen(true));
+    sidebarBackdrop.addEventListener('click', () => setSidebarOpen(false));
+
+    // On phones the sidebar starts collapsed (it would otherwise cover the whole map);
+    // on desktop/tablet it starts open like before.
+    setSidebarOpen(!isMobileViewport());
+
+    let lastIsMobile = isMobileViewport();
+    window.addEventListener('resize', () => {
+        const nowMobile = isMobileViewport();
+        if (nowMobile !== lastIsMobile) {
+            lastIsMobile = nowMobile;
+            setSidebarOpen(!nowMobile);
+        }
+    });
 
     document.querySelectorAll('.mode-btn').forEach(btn => {
         btn.addEventListener('click', () => {
