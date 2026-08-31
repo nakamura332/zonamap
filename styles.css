@@ -640,6 +640,10 @@ body, html {
     margin-left: 10px;
 }
 
+.coords-hud.hidden {
+    display: none;
+}
+
 #coordsVal, #zoomLevelVal {
     color: var(--primary-color);
     font-weight: 600;
@@ -966,69 +970,6 @@ body, html {
 .action-btn:hover {
     background: var(--primary-color);
     color: #000;
-}
-
-/* Radar HUD Decorative */
-.pda-radar-hud {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: rgba(10, 14, 20, 0.6);
-    border: 1px solid rgba(0, 255, 102, 0.3);
-    pointer-events: none;
-    z-index: 80;
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.radar-circle {
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    border: 1px dashed rgba(0, 255, 102, 0.4);
-    position: relative;
-    animation: radarRotate 4s linear infinite;
-}
-
-@keyframes radarRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.radar-line {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 50%;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(0,255,102,0.8), transparent);
-    transform-origin: left center;
-}
-
-.radar-blip {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: #00ff66;
-    border-radius: 50%;
-    box-shadow: 0 0 6px #00ff66;
-}
-.radar-blip.b1 { top: 20%; left: 30%; }
-.radar-blip.b2 { top: 60%; left: 70%; }
-.radar-blip.b3 { top: 40%; left: 80%; }
-
-.compass-north {
-    position: absolute;
-    top: 4px;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 10px;
-    color: var(--green-stalker);
 }
 
 /* ==========================================================================

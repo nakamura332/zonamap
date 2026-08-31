@@ -197,6 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const markersLayer = document.getElementById('markersLayer');
     const zonesSvgLayer = document.getElementById('zonesSvgLayer');
     const zoneDrawSvgLayer = document.getElementById('zoneDrawSvgLayer');
+    const coordsHud = document.getElementById('coordsHud');
     const coordsVal = document.getElementById('coordsVal');
     const zoomLevelVal = document.getElementById('zoomLevelVal');
     const detailsCard = document.getElementById('detailsCard');
@@ -716,12 +717,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             if (activeSelectedMarker) cardAdminActions.classList.remove('hidden');
+
+            // Координаты холста нужны только Админу/Модератору для расстановки
+            // меток — обычного игрока они только запутают (это не игровые /tp-координаты).
+            if (coordsHud) coordsHud.classList.remove('hidden');
         } else {
             sessionStorage.removeItem('gta_sa_stalker_user_role');
             btnToggleAdmin.classList.remove('active');
             btnToggleAdmin.innerHTML = '<i class="fa-solid fa-user-gear"></i> <span>Авторизация</span>';
             adminHudBanner.classList.add('hidden');
             cardAdminActions.classList.add('hidden');
+            if (coordsHud) coordsHud.classList.add('hidden');
             if (isDrawingZone) stopZoneDraw();
         }
         renderHazardZones();
