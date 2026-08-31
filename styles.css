@@ -1792,3 +1792,36 @@ body, html {
     animation: markerPulse 0.7s ease 3;
     z-index: 999;
 }
+
+/* ==========================================================================
+   DRAFT MODE STYLES
+   ========================================================================== */
+.draft-mode-banner {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(235, 77, 75, 0.9);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(235, 77, 75, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    letter-spacing: 0.5px;
+}
+
+.draft-mode-banner.hidden {
+    display: none;
+}
+
+select option.draft-option {
+    color: #ff4757;
+    font-weight: bold;
+}

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         danger:    { color: 'rgba(255, 71, 87, 0.35)',  border: '#ff4757', label: 'Опасная зона' }
     };
 
-    // 9 Вариаций Карт
+    // 9 Вариаций Карт + скрытый черновик для Адм/Мод
     const MAP_VERSIONS = [
         { id: 'map1', label: 'Карта #1' },
         { id: 'map2', label: 'Карта #2' },
@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'map6', label: 'Карта #6' },
         { id: 'map7', label: 'Карта #7' },
         { id: 'map8', label: 'Карта #8' },
-        { id: 'map9', label: 'Карта #9' }
+        { id: 'map9', label: 'Карта #9' },
+        { id: 'map_draft', label: '🔒 Черновик', adminOnly: true }
     ];
 
     const MARKER_TYPES_INFO = {
@@ -725,8 +726,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     : '<i class="fa-solid fa-user-shield"></i> МОДЕРАЦИЯ';
             }
 
-            // "Очистить всё" и "Экспорт JSON" — только для Админа
-            // (модератору не нужно видеть публикацию/деплой data.json)
+            // «Очистить всё» и «Экспорт JSON» — только для Админа
             if (resetBtn) {
                 resetBtn.style.display = (role === 'admin') ? 'inline-flex' : 'none';
             }
@@ -735,9 +735,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             if (activeSelectedMarker) cardAdminActions.classList.remove('hidden');
-
-            // Координаты холста нужны только Админу/Модератору для расстановки
-            // меток — обычного игрока они только запутают (это не игровые /tp-координаты).
             if (coordsHud) coordsHud.classList.remove('hidden');
         } else {
             sessionStorage.removeItem('gta_sa_stalker_user_role');
@@ -747,8 +744,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             cardAdminActions.classList.add('hidden');
             if (coordsHud) coordsHud.classList.add('hidden');
             if (isDrawingZone) stopZoneDraw();
+
+            // При выходе — если были на черновике, уходим на map1
+            if (currentMapId === 'map_draft') {
+                currentMapId = 'map1';
+                localStorage.setItem('gta_sa_stalker_current_map', currentMapId);
+            }
         }
+
+        // Перестраиваем селектор: черновик доступен только авторизованным
+        refreshMapSelector();
+
+        // Скрываем/показываем опцию черновика в модалках маркера и зоны
+        ['markerMapId', 'zoneMapId'].forEach(selectId => {
+            const opt = document.querySelector(`#${selectId} option[value="map_draft"]`);
+            if (opt) opt.style.display = role ? '' : 'none';
+        });
+
         renderHazardZones();
+    }
+
+    // Перестраивает <select> выбора карты с учётом роли текущего пользователя
+    function refreshMapSelector() {
+        if (!mapVersionSelect) return;
+        const visibleMaps = MAP_VERSIONS.filter(m => !m.adminOnly || isAdminMode);
+        mapVersionSelect.innerHTML = visibleMaps
+            .map(m => `<option value="${m.id}"${m.adminOnly ? ' class="draft-option"' : ''}>${m.label}</option>`)
+            .join('');
+        // Если текущий выбор недоступен (напр. черновик после выхода) — сбросить на map1
+        if (!visibleMaps.some(m => m.id === currentMapId)) {
+            currentMapId = 'map1';
+            localStorage.setItem('gta_sa_stalker_current_map', currentMapId);
+        }
+        mapVersionSelect.value = currentMapId;
     }
 
     // Auto-restore active role on refresh
@@ -1153,13 +1181,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem('gta_sa_stalker_current_map', currentMapId);
         detailsCard.classList.add('hidden');
         activeSelectedMarker = null;
+
+        // Показываем/скрываем баннер "режим черновика"
+        const draftBanner = document.getElementById('draftModeBanner');
+        if (draftBanner) {
+            draftBanner.classList.toggle('hidden', currentMapId !== 'map_draft');
+        }
+
         renderMarkers();
         renderHazardZones();
     }
 
     if (mapVersionSelect) {
-        mapVersionSelect.innerHTML = MAP_VERSIONS.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
-        mapVersionSelect.value = currentMapId;
+        // Первичное заполнение с учётом роли (refreshMapSelector вызывается и из setRoleState)
+        refreshMapSelector();
         mapVersionSelect.addEventListener('change', () => switchMap(mapVersionSelect.value));
     }
 
