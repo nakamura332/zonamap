@@ -1307,6 +1307,10 @@ body, html {
     display: none;
 }
 
+.share-toast.hidden {
+    display: none;
+}
+
 .action-btn.edit {
     background: rgba(255, 153, 0, 0.15);
     border-color: var(--amber-color);
