@@ -651,16 +651,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // --- URL SHARING ---
         document.getElementById('btnShareMarker').onclick = () => {
+            const btn = document.getElementById('btnShareMarker');
             const url = new URL(window.location.href);
             url.searchParams.set('marker', item.id);
-            // Also set the map version so recipient sees the same map
             url.searchParams.set('map', item.mapId || 'all');
             navigator.clipboard.writeText(url.toString()).then(() => {
-                const toast = document.getElementById('shareToast');
-                toast.classList.remove('hidden');
-                setTimeout(() => toast.classList.add('hidden'), 2500);
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Ссылка скопирована!';
+                btn.disabled = true;
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i> Поделиться точкой';
+                    btn.disabled = false;
+                }, 2000);
             }).catch(() => {
-                // fallback: show in prompt
                 prompt('Скопируйте ссылку:', url.toString());
             });
         };
