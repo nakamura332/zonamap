@@ -246,6 +246,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 4. RENDER HAZARD ZONES & SIDEBAR ZONE MANAGER
     // ----------------------------------------------------------------------
     function getVisibleZones() {
+        if (currentMapId === 'map_draft') {
+            return allZonesData.filter(z => z.mapId === 'map_draft');
+        }
         return allZonesData.filter(z => (z.mapId || 'all') === 'all' || z.mapId === currentMapId);
     }
 
@@ -384,6 +387,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 5. RENDER MARKERS
     // ----------------------------------------------------------------------
     function getVisibleMarkers() {
+        if (currentMapId === 'map_draft') {
+            return allMarkersData.filter(m => m.mapId === 'map_draft');
+        }
         return allMarkersData.filter(m => (m.mapId || 'all') === 'all' || m.mapId === currentMapId);
     }
 
