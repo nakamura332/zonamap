@@ -1,5 +1,5 @@
 {
-  "version": "1787975303235",
+  "version": "1788172497673",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -989,6 +989,28 @@
       "x": 1607,
       "y": 600,
       "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1788172480213",
+      "mapId": "map_draft",
+      "type": "gazirovka",
+      "name": "Шкебеде",
+      "location": "Zone Sector",
+      "x": 2117,
+      "y": 1461,
+      "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": null
+    },
+    {
+      "id": "custom-1788172490947",
+      "mapId": "map_draft",
+      "type": "tramplin",
+      "name": "Доп доп ес ес",
+      "location": "Zone Sector",
+      "x": 2180,
+      "y": 1428,
+      "desc": "Описание точки, артефактов или секретного лута.",
       "photo": null
     }
   ],
