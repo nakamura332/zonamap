@@ -648,6 +648,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             navigator.clipboard.writeText(cmd);
             alert(`Команда телепорта скопирована:\n${cmd}`);
         };
+
+        // --- URL SHARING ---
+        document.getElementById('btnShareMarker').onclick = () => {
+            const url = new URL(window.location.href);
+            url.searchParams.set('marker', item.id);
+            // Also set the map version so recipient sees the same map
+            url.searchParams.set('map', item.mapId || 'all');
+            navigator.clipboard.writeText(url.toString()).then(() => {
+                const toast = document.getElementById('shareToast');
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 2500);
+            }).catch(() => {
+                // fallback: show in prompt
+                prompt('Скопируйте ссылку:', url.toString());
+            });
+        };
     }
 
     function getTypeName(type) {
@@ -1163,6 +1179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // #selectAllTypes — глобальная кнопка "Все" для всех секций (присутствует в секции зоны)
     const selectAllBtn = document.getElementById('selectAllTypes');
     if (selectAllBtn) {
         selectAllBtn.addEventListener('click', () => {
@@ -1462,10 +1479,91 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ----------------------------------------------------------------------
+    // 12. URL SHARING — auto-open marker from ?marker=ID&map=mapX
+    // ----------------------------------------------------------------------
+    function openMarkerFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const markerId = params.get('marker');
+        const mapParam = params.get('map');
+
+        if (!markerId) return;
+
+        // Switch to the correct map version if specified
+        if (mapParam && mapParam !== 'all' && MAP_VERSIONS.some(m => m.id === mapParam)) {
+            currentMapId = mapParam;
+            if (mapVersionSelect) mapVersionSelect.value = currentMapId;
+            localStorage.setItem('gta_sa_stalker_current_map', currentMapId);
+        }
+
+        renderMarkers();
+        renderHazardZones();
+
+        const marker = allMarkersData.find(m => m.id === markerId);
+        if (!marker) return;
+
+        // Center the map on the marker
+        const rect = mapViewport.getBoundingClientRect();
+        currentScale = 1.2;
+        currentX = (rect.width / 2) - (marker.x * currentScale);
+        currentY = (rect.height / 2) - (marker.y * currentScale);
+        updateTransform();
+
+        // Open the details card
+        openMarkerDetails(marker);
+
+        // Briefly highlight the marker element
+        setTimeout(() => {
+            const el = document.querySelector(`.map-marker[data-id="${marker.id}"]`);
+            if (el) {
+                el.classList.add('marker-highlight');
+                setTimeout(() => el.classList.remove('marker-highlight'), 2000);
+            }
+        }, 100);
+    }
+
+    // ----------------------------------------------------------------------
+    // 13. GROUP FILTER TOGGLES (Все / Нет per section)
+    // ----------------------------------------------------------------------
+    document.querySelectorAll('.group-none').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const group = btn.dataset.group;
+            const section = document.querySelector(`.filter-section[data-group="${group}"]`);
+            if (!section) return;
+            section.querySelectorAll('.filter-card input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+                cb.closest('.filter-card').classList.remove('active');
+                activeFilters.delete(cb.value);
+            });
+            renderMarkers();
+            renderHazardZones();
+        });
+    });
+
+    document.querySelectorAll('.group-all').forEach(btn => {
+        // The existing #selectAllTypes for section 1 is handled separately,
+        // but we also cover all sections uniformly here
+        btn.addEventListener('click', () => {
+            const group = btn.dataset.group;
+            const section = document.querySelector(`.filter-section[data-group="${group}"]`);
+            if (!section) return;
+            section.querySelectorAll('.filter-card input[type="checkbox"]').forEach(cb => {
+                cb.checked = true;
+                cb.closest('.filter-card').classList.add('active');
+                activeFilters.add(cb.value);
+            });
+            renderMarkers();
+            renderHazardZones();
+        });
+    });
+
+    // ----------------------------------------------------------------------
     // INITIAL START
     // ----------------------------------------------------------------------
     initMapBackground();
     renderHazardZones();
     renderMarkers();
     updateTransform();
+
+    // Open marker from URL after initial render
+    openMarkerFromUrl();
 });

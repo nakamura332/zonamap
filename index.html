@@ -88,10 +88,13 @@
                 <!-- Legend & Layer Toggles -->
                 <div class="sidebar-content">
                     <!-- 1. Аномалии и нычки зоны -->
-                    <div class="filter-section">
+                    <div class="filter-section" data-group="zone">
                         <div class="section-title">
                             <span>Аномалии и нычки зоны</span>
-                            <button class="btn-link" id="selectAllTypes">Все</button>
+                            <div class="group-toggles">
+                                <button class="btn-link group-all" id="selectAllTypes" data-group="zone">Все</button>
+                                <button class="btn-link group-none" data-group="zone">Нет</button>
+                            </div>
                         </div>
                         <div class="filter-grid">
                             <label class="filter-card zharka active" data-type="zharka">
@@ -169,9 +172,13 @@
                     </div>
 
                     <!-- 2. Аномалии и нычки LV -->
-                    <div class="filter-section">
+                    <div class="filter-section" data-group="lv">
                         <div class="section-title">
                             <span>Аномалии и нычки LV</span>
+                            <div class="group-toggles">
+                                <button class="btn-link group-all" data-group="lv">Все</button>
+                                <button class="btn-link group-none" data-group="lv">Нет</button>
+                            </div>
                         </div>
                         <div class="filter-grid">
                             <label class="filter-card lomot_myasa active" data-type="lomot_myasa">
@@ -210,6 +217,15 @@
                                 </div>
                             </label>
 
+                            <label class="filter-card zolotaya_rybka active" data-type="zolotaya_rybka">
+                                <input type="checkbox" checked value="zolotaya_rybka">
+                                <span class="marker-icon-preview zolotaya_rybka"><i class="fa-solid fa-fish"></i></span>
+                                <div class="filter-info">
+                                    <span class="filter-name">Золотая рыбка</span>
+                                    <span class="filter-count" id="count-zolotaya_rybka">0</span>
+                                </div>
+                            </label>
+
                             <label class="filter-card nychka active" data-type="nychka">
                                 <input type="checkbox" checked value="nychka">
                                 <span class="marker-icon-preview nychka"><i class="fa-solid fa-box-archive"></i></span>
@@ -236,22 +252,17 @@
                                     <span class="filter-count" id="count-tochka_skanirovaniya">0</span>
                                 </div>
                             </label>
-
-                            <label class="filter-card zolotaya_rybka active" data-type="zolotaya_rybka">
-                                <input type="checkbox" checked value="zolotaya_rybka">
-                                <span class="marker-icon-preview zolotaya_rybka"><i class="fa-solid fa-fish"></i></span>
-                                <div class="filter-info">
-                                    <span class="filter-name">Золотая рыбка</span>
-                                    <span class="filter-count" id="count-zolotaya_rybka">0</span>
-                                </div>
-                            </label>
                         </div>
                     </div>
 
                     <!-- 3. Прочее -->
-                    <div class="filter-section">
+                    <div class="filter-section" data-group="misc">
                         <div class="section-title">
                             <span>Прочее</span>
+                            <div class="group-toggles">
+                                <button class="btn-link group-all" data-group="misc">Все</button>
+                                <button class="btn-link group-none" data-group="misc">Нет</button>
+                            </div>
                         </div>
                         <div class="filter-grid">
                             <label class="filter-card ranenny_brodyaga active" data-type="ranenny_brodyaga">
@@ -293,9 +304,13 @@
                     </div>
 
                     <!-- 4. Базы Фракций -->
-                    <div class="filter-section">
+                    <div class="filter-section" data-group="bases">
                         <div class="section-title">
                             <span>Базы Фракций</span>
+                            <div class="group-toggles">
+                                <button class="btn-link group-all" data-group="bases">Все</button>
+                                <button class="btn-link group-none" data-group="bases">Нет</button>
+                            </div>
                         </div>
                         <div class="filter-grid">
                             <label class="filter-card base_stalker active" data-type="base_stalker">
@@ -501,7 +516,10 @@
                         </div>
                         <div class="card-actions">
                             <button class="action-btn" id="btnCopyCoords"><i class="fa-solid fa-copy"></i> Скопировать координаты</button>
+                            <button class="action-btn share" id="btnShareMarker"><i class="fa-solid fa-share-nodes"></i> Поделиться точкой</button>
                         </div>
+                        <!-- Share toast notification -->
+                        <div class="share-toast hidden" id="shareToast"><i class="fa-solid fa-check-circle"></i> Ссылка скопирована!</div>
                         <div class="card-admin-actions hidden" id="cardAdminActions">
                             <button class="action-btn edit" id="btnEditMarker"><i class="fa-solid fa-pen-to-square"></i> Изменить</button>
                             <button class="action-btn delete" id="btnDeleteMarker"><i class="fa-solid fa-trash-can"></i> Удалить</button>
@@ -625,10 +643,10 @@
                             <option value="alenkiy_cvetochek">🌺 Аленький цветочек</option>
                             <option value="vyvert">🌀 Выверт</option>
                             <option value="kolobok">🟡 Колобок</option>
+                            <option value="zolotaya_rybka">🐠 Золотая рыбка</option>
                             <option value="nychka">📦 Нычка</option>
                             <option value="konteyner">🧰 Контейнер</option>
                             <option value="tochka_skanirovaniya">📡 Точка сканирования</option>
-                            <option value="zolotaya_rybka">🐠 Золотая рыбка</option>
                         </optgroup>
                         <optgroup label="Прочее">
                             <option value="ranenny_brodyaga">🤕 Раненный бродяга</option>
