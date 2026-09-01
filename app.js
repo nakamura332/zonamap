@@ -129,6 +129,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     let announcementData = { text: '', active: false };
 
     async function loadPublishedData() {
+        if (window.location.protocol === 'file:') {
+            const storedA = localStorage.getItem(ANNOUNCEMENT_STORAGE_KEY);
+            if (storedA) {
+                try { announcementData = JSON.parse(storedA); } catch (e) {}
+            }
+            return;
+        }
+
         try {
             const res = await fetch(`data.json?_=${Date.now()}`, { cache: 'no-store' });
             if (res.ok) {
@@ -905,7 +913,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const cardPhotoWrap = document.getElementById('cardPhotoWrap');
     const cardPhoto = document.getElementById('cardPhoto');
-    cardPhotoWrap.addEventListener('click', () => {
+    cardPhotoWrap?.addEventListener('click', () => {
+        if (!cardPhoto || !cardPhoto.src) return;
         const lb = document.createElement('div');
         lb.className = 'photo-lightbox';
         const img = document.createElement('img');
@@ -1794,7 +1803,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // INITIAL START
     // ----------------------------------------------------------------------
     initMapBackground();
-    await loadPublishedData();
+    try {
+        await loadPublishedData();
+    } catch (e) {
+        console.warn('Не удалось загрузить данные:', e);
+    }
     renderAnnouncementBanner();
     renderHazardZones();
     renderMarkers();
