@@ -1,5 +1,5 @@
 {
-  "version": "1788175158004",
+  "version": "1788253362425",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -762,7 +762,7 @@
     },
     {
       "id": "custom-1787941068502",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -773,7 +773,7 @@
     },
     {
       "id": "custom-1787941079016",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -784,7 +784,7 @@
     },
     {
       "id": "custom-1787941094020",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -795,7 +795,7 @@
     },
     {
       "id": "custom-1787941122355",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -806,7 +806,7 @@
     },
     {
       "id": "custom-1787941136522",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -817,7 +817,7 @@
     },
     {
       "id": "custom-1787941162311",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -828,7 +828,7 @@
     },
     {
       "id": "custom-1787941225614",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -839,7 +839,7 @@
     },
     {
       "id": "custom-1787941236691",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -850,7 +850,7 @@
     },
     {
       "id": "custom-1787941247703",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -861,7 +861,7 @@
     },
     {
       "id": "custom-1787941253912",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -872,7 +872,7 @@
     },
     {
       "id": "custom-1787941266871",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -883,7 +883,7 @@
     },
     {
       "id": "custom-1787941279619",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -894,7 +894,7 @@
     },
     {
       "id": "custom-1787941295704",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -905,7 +905,7 @@
     },
     {
       "id": "custom-1787941306733",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -916,7 +916,7 @@
     },
     {
       "id": "custom-1787941318021",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -927,7 +927,7 @@
     },
     {
       "id": "custom-1787941339444",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -938,7 +938,7 @@
     },
     {
       "id": "custom-1787941348071",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -949,7 +949,7 @@
     },
     {
       "id": "custom-1787941380798",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -960,7 +960,7 @@
     },
     {
       "id": "custom-1787941402979",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -971,7 +971,7 @@
     },
     {
       "id": "custom-1787941424515",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -982,7 +982,7 @@
     },
     {
       "id": "custom-1787941468400",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -1059,7 +1059,7 @@
     },
     {
       "id": "custom-1788173048013",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "zharka",
       "name": "Жарка",
       "location": "Zone Sector",
@@ -1070,7 +1070,7 @@
     },
     {
       "id": "custom-1788173094009",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1081,7 +1081,7 @@
     },
     {
       "id": "custom-1788173103018",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1092,7 +1092,7 @@
     },
     {
       "id": "custom-1788173124394",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1103,7 +1103,7 @@
     },
     {
       "id": "custom-1788173138456",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1114,7 +1114,7 @@
     },
     {
       "id": "custom-1788173150937",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1125,7 +1125,7 @@
     },
     {
       "id": "custom-1788173163825",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1136,7 +1136,7 @@
     },
     {
       "id": "custom-1788173174230",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1147,7 +1147,7 @@
     },
     {
       "id": "custom-1788173183590",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1158,7 +1158,7 @@
     },
     {
       "id": "custom-1788173189287",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1169,7 +1169,7 @@
     },
     {
       "id": "custom-1788173197773",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1180,7 +1180,7 @@
     },
     {
       "id": "custom-1788173214655",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1191,7 +1191,7 @@
     },
     {
       "id": "custom-1788173220248",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1202,7 +1202,7 @@
     },
     {
       "id": "custom-1788173229102",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1213,7 +1213,7 @@
     },
     {
       "id": "custom-1788173241990",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1224,7 +1224,7 @@
     },
     {
       "id": "custom-1788173256375",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1235,7 +1235,7 @@
     },
     {
       "id": "custom-1788173269415",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1246,7 +1246,7 @@
     },
     {
       "id": "custom-1788173280660",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1257,7 +1257,7 @@
     },
     {
       "id": "custom-1788173292166",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1268,7 +1268,7 @@
     },
     {
       "id": "custom-1788173309886",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1279,7 +1279,7 @@
     },
     {
       "id": "custom-1788173316841",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1290,7 +1290,7 @@
     },
     {
       "id": "custom-1788173330108",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1301,7 +1301,7 @@
     },
     {
       "id": "custom-1788173412563",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1312,7 +1312,7 @@
     },
     {
       "id": "custom-1788173424138",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1323,7 +1323,7 @@
     },
     {
       "id": "custom-1788173440486",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1334,7 +1334,7 @@
     },
     {
       "id": "custom-1788173447560",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1345,7 +1345,7 @@
     },
     {
       "id": "custom-1788173458187",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1356,7 +1356,7 @@
     },
     {
       "id": "custom-1788173467172",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1367,7 +1367,7 @@
     },
     {
       "id": "custom-1788173482543",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1378,7 +1378,7 @@
     },
     {
       "id": "custom-1788173499530",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1389,7 +1389,7 @@
     },
     {
       "id": "custom-1788173511267",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1400,7 +1400,7 @@
     },
     {
       "id": "custom-1788173528003",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1411,7 +1411,7 @@
     },
     {
       "id": "custom-1788173534460",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1422,7 +1422,7 @@
     },
     {
       "id": "custom-1788173543207",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1433,7 +1433,7 @@
     },
     {
       "id": "custom-1788173552096",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1444,7 +1444,7 @@
     },
     {
       "id": "custom-1788173561007",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1455,7 +1455,7 @@
     },
     {
       "id": "custom-1788173593733",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1466,7 +1466,7 @@
     },
     {
       "id": "custom-1788173600572",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1477,7 +1477,7 @@
     },
     {
       "id": "custom-1788173611159",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1488,7 +1488,7 @@
     },
     {
       "id": "custom-1788173674856",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1499,7 +1499,7 @@
     },
     {
       "id": "custom-1788173814229",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1510,7 +1510,7 @@
     },
     {
       "id": "custom-1788173830375",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1521,7 +1521,7 @@
     },
     {
       "id": "custom-1788173847138",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1532,7 +1532,7 @@
     },
     {
       "id": "custom-1788173905100",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1543,7 +1543,7 @@
     },
     {
       "id": "custom-1788173933374",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1554,7 +1554,7 @@
     },
     {
       "id": "custom-1788173938646",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1565,7 +1565,7 @@
     },
     {
       "id": "custom-1788173946271",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "elektra",
       "name": "Электра",
       "location": "Zone Sector",
@@ -1576,7 +1576,7 @@
     },
     {
       "id": "custom-1788174054150",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1587,7 +1587,7 @@
     },
     {
       "id": "custom-1788174061270",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1598,7 +1598,7 @@
     },
     {
       "id": "custom-1788174068373",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1609,7 +1609,7 @@
     },
     {
       "id": "custom-1788174073346",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1620,7 +1620,7 @@
     },
     {
       "id": "custom-1788174083722",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1631,7 +1631,7 @@
     },
     {
       "id": "custom-1788174088953",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1642,7 +1642,7 @@
     },
     {
       "id": "custom-1788174108684",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1653,7 +1653,7 @@
     },
     {
       "id": "custom-1788174115041",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1664,7 +1664,7 @@
     },
     {
       "id": "custom-1788174128605",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1675,7 +1675,7 @@
     },
     {
       "id": "custom-1788174139103",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1686,7 +1686,7 @@
     },
     {
       "id": "custom-1788174147378",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1697,7 +1697,7 @@
     },
     {
       "id": "custom-1788174153055",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1708,7 +1708,7 @@
     },
     {
       "id": "custom-1788174158706",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1719,7 +1719,7 @@
     },
     {
       "id": "custom-1788174166121",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1730,7 +1730,7 @@
     },
     {
       "id": "custom-1788174173710",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1741,7 +1741,7 @@
     },
     {
       "id": "custom-1788174181280",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1752,7 +1752,7 @@
     },
     {
       "id": "custom-1788174187858",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1763,7 +1763,7 @@
     },
     {
       "id": "custom-1788174193462",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1774,7 +1774,7 @@
     },
     {
       "id": "custom-1788174206387",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1785,7 +1785,7 @@
     },
     {
       "id": "custom-1788174212923",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1796,7 +1796,7 @@
     },
     {
       "id": "custom-1788174218100",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1807,7 +1807,7 @@
     },
     {
       "id": "custom-1788174224464",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1818,7 +1818,7 @@
     },
     {
       "id": "custom-1788174230528",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1829,7 +1829,7 @@
     },
     {
       "id": "custom-1788174237185",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1840,7 +1840,7 @@
     },
     {
       "id": "custom-1788174244230",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1851,7 +1851,7 @@
     },
     {
       "id": "custom-1788174250711",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "tramplin",
       "name": "Трамплин",
       "location": "Zone Sector",
@@ -1862,7 +1862,7 @@
     },
     {
       "id": "custom-1788174292221",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1873,7 +1873,7 @@
     },
     {
       "id": "custom-1788174304399",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1884,7 +1884,7 @@
     },
     {
       "id": "custom-1788174310676",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1895,7 +1895,7 @@
     },
     {
       "id": "custom-1788174322738",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1906,7 +1906,7 @@
     },
     {
       "id": "custom-1788174330095",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1917,7 +1917,7 @@
     },
     {
       "id": "custom-1788174343176",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1928,7 +1928,7 @@
     },
     {
       "id": "custom-1788174356986",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1939,7 +1939,7 @@
     },
     {
       "id": "custom-1788174370996",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1950,7 +1950,7 @@
     },
     {
       "id": "custom-1788174386732",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1961,7 +1961,7 @@
     },
     {
       "id": "custom-1788174404366",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "gazirovka",
       "name": "Газировка",
       "location": "Zone Sector",
@@ -1972,7 +1972,7 @@
     },
     {
       "id": "custom-1788174419314",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1983,7 +1983,7 @@
     },
     {
       "id": "custom-1788174427524",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -1994,7 +1994,7 @@
     },
     {
       "id": "custom-1788174436181",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2005,7 +2005,7 @@
     },
     {
       "id": "custom-1788174444194",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2016,7 +2016,7 @@
     },
     {
       "id": "custom-1788174468843",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2027,7 +2027,7 @@
     },
     {
       "id": "custom-1788174489532",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2038,7 +2038,7 @@
     },
     {
       "id": "custom-1788174500867",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2049,7 +2049,7 @@
     },
     {
       "id": "custom-1788174529610",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2060,7 +2060,7 @@
     },
     {
       "id": "custom-1788174543827",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2071,7 +2071,7 @@
     },
     {
       "id": "custom-1788174552019",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2082,7 +2082,7 @@
     },
     {
       "id": "custom-1788174579626",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2093,7 +2093,7 @@
     },
     {
       "id": "custom-1788174593602",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2104,7 +2104,7 @@
     },
     {
       "id": "custom-1788174631984",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2115,7 +2115,7 @@
     },
     {
       "id": "custom-1788174662497",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "medusa",
       "name": "Медуза",
       "location": "Zone Sector",
@@ -2126,7 +2126,7 @@
     },
     {
       "id": "custom-1788174713152",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "voda",
       "name": "Вода",
       "location": "Zone Sector",
@@ -2137,7 +2137,7 @@
     },
     {
       "id": "custom-1788174721622",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "voda",
       "name": "Вода",
       "location": "Zone Sector",
@@ -2148,7 +2148,7 @@
     },
     {
       "id": "custom-1788174728112",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "voda",
       "name": "Вода",
       "location": "Zone Sector",
@@ -2159,13 +2159,24 @@
     },
     {
       "id": "custom-1788174734255",
-      "mapId": "map1",
+      "mapId": "map_draft",
       "type": "voda",
       "name": "Вода",
       "location": "Zone Sector",
       "x": 913,
       "y": 710,
       "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1788253358657",
+      "mapId": "map_draft",
+      "type": "zharka",
+      "name": "Шкебеде",
+      "location": "Zone Sector",
+      "x": 2976,
+      "y": 28,
+      "desc": "Описание точки, артефактов или секретного лута.",
       "photo": null
     }
   ],
