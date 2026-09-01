@@ -1,5 +1,5 @@
 {
-  "version": "1788253362425",
+  "version": "1788262820664",
   "markers": [
     {
       "id": "custom-1787912291486",
@@ -2177,6 +2177,105 @@
       "x": 2976,
       "y": 28,
       "desc": "Описание точки, артефактов или секретного лута.",
+      "photo": null
+    },
+    {
+      "id": "custom-1788261240147",
+      "mapId": "all",
+      "type": "tochka_skanirovaniya",
+      "name": "Сканирование",
+      "location": "Лас-Вентурас",
+      "x": 2286,
+      "y": 539,
+      "desc": "Сканирование находится рядом с СТО, поблизости можно подобрать нычку сиплого.",
+      "photo": "https://i.yapx.ru/eKRU0.jpg"
+    },
+    {
+      "id": "custom-1788262412206",
+      "mapId": "all",
+      "type": "tochka_skanirovaniya",
+      "name": "Сканирование",
+      "location": "Лас-Вентурас",
+      "x": 2395,
+      "y": 460,
+      "desc": "Сканирование находится под мостом.",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262449443",
+      "mapId": "all",
+      "type": "tochka_skanirovaniya",
+      "name": "Сканирование",
+      "location": "Лас-Вентурас",
+      "x": 2193,
+      "y": 536,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262497980",
+      "mapId": "all",
+      "type": "tochka_skanirovaniya",
+      "name": "Сканирование",
+      "location": "Лас-Вентурас",
+      "x": 2159,
+      "y": 922,
+      "desc": "Сканирование находится за базой Монолита.",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262527833",
+      "mapId": "all",
+      "type": "tochka_skanirovaniya",
+      "name": "Сканирование",
+      "location": "Лас-Вентурас",
+      "x": 2333,
+      "y": 961,
+      "desc": "Сканирование находится за ангаром джаггернатуа.",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262651410",
+      "mapId": "all",
+      "type": "zolotaya_rybka",
+      "name": "Золотая рыбка",
+      "location": "Лас-Вентурас",
+      "x": 2290,
+      "y": 422,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262669766",
+      "mapId": "all",
+      "type": "zolotaya_rybka",
+      "name": "Золотая рыбка",
+      "location": "Лас-Вентурас",
+      "x": 2301,
+      "y": 528,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262692700",
+      "mapId": "all",
+      "type": "zolotaya_rybka",
+      "name": "Золотая рыбка",
+      "location": "Лас-Вентурас",
+      "x": 2162,
+      "y": 691,
+      "desc": "",
+      "photo": null
+    },
+    {
+      "id": "custom-1788262815506",
+      "mapId": "all",
+      "type": "zolotaya_rybka",
+      "name": "Золотая рыбка",
+      "location": "Лас-Вентурас",
+      "x": 2299,
+      "y": 909,
+      "desc": "",
       "photo": null
     }
   ],
