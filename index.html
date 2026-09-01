@@ -28,8 +28,10 @@
             <div class="top-controls">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="Поиск объекта, аномалии или пузыря (#1-14)...">
+                    <input type="text" id="searchInput" placeholder="Поиск объекта, аномалии или пузыря (#1-14)..." autocomplete="off">
+                    <span id="searchBadge" class="search-badge hidden">0</span>
                     <button id="clearSearch" class="btn-icon" title="Очистить"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="search-results-dropdown hidden" id="searchResultsDropdown"></div>
                 </div>
 
                 <div class="quick-stats">
@@ -436,8 +438,15 @@
                     <button class="hud-btn" id="fullScreen" title="На весь экран"><i class="fa-solid fa-expand"></i></button>
                 </div>
 
+                <!-- Top Compact Announcement Banner -->
+                <div class="top-announcement-banner hidden" id="topAnnouncementBanner">
+                    <i class="fa-solid fa-bullhorn announcement-icon"></i>
+                    <div class="announcement-text" id="announcementText"></div>
+                    <button class="announcement-close" id="closeAnnouncement" title="Скрыть объявление"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
                 <!-- Coordinates HUD display -->
-                <div class="coords-hud hidden" id="coordsHud">
+                <div class="coords-hud hidden" id="coordsHud" title="Нажмите, чтобы скопировать команду /tp">
                     <span class="hud-label">SAMP:</span>
                     <span id="coordsVal">Наведите на карту</span>
                     <span class="hud-label zoom-label">Zoom:</span>
@@ -447,19 +456,29 @@
                 <!-- Draft Mode Banner -->
                 <div class="draft-mode-banner hidden" id="draftModeBanner">
                     <i class="fa-solid fa-lock"></i>
-                    <span>ЧЕРНОВИК — только для Адм/Мод. Точки видны только вам.</span>
+                    <span>ЧЕРНОВИК — только для Адм/Картографа. Точки видны только вам.</span>
                 </div>
 
                 <!-- Admin HUD Banner -->
                 <div class="admin-hud-banner hidden" id="adminHudBanner">
-                    <div class="admin-status"><i class="fa-solid fa-pen-to-square"></i> АДМИН-ПАНЕЛЬ</div>
+                    <div class="admin-status" id="adminStatusText"><i class="fa-solid fa-pen-to-square"></i> АДМИН-ПАНЕЛЬ</div>
                     <div class="admin-hint">Клик по карте — новая метка</div>
                     <div class="admin-actions">
                         <button class="admin-btn" id="btnAddZone" title="Нарисовать зону"><i class="fa-solid fa-draw-polygon"></i> + Зона</button>
+                        <button class="admin-btn admin-only-feature" id="btnEditAnnouncement" title="Редактировать объявление карты"><i class="fa-solid fa-bullhorn"></i> Объявление</button>
+                        <button class="admin-btn admin-only-feature" id="btnExportAnnouncement" title="Скачать объявление в announcement.json"><i class="fa-solid fa-file-code"></i> Эксп. Объявл.</button>
                         <button class="admin-btn" id="btnExportJson" title="Экспорт данных в JSON"><i class="fa-solid fa-download"></i> Экспорт</button>
                         <label class="admin-btn" title="Импорт данных из JSON"><i class="fa-solid fa-upload"></i> Импорт <input type="file" id="importJsonInput" accept=".json" style="display:none"></label>
-                        <button class="admin-btn" id="btnChangePassword" title="Изменить пароль"><i class="fa-solid fa-key"></i> Пароль</button>
                         <button class="admin-btn danger" id="btnResetMarkers" title="Полностью очистить карту от всех меток и зон"><i class="fa-solid fa-trash"></i> Очистить</button>
+                    </div>
+                </div>
+
+                <!-- Ruler Active Banner -->
+                <div class="admin-hud-banner ruler-draw-banner hidden" id="rulerDrawBanner">
+                    <div class="admin-status"><i class="fa-solid fa-ruler-combined"></i> ИЗМЕРИТЕЛЬ ДИСТАНЦИИ</div>
+                    <div class="admin-hint" id="rulerHint">Кликните по карте, чтобы поставить первую точку (A)</div>
+                    <div class="admin-actions">
+                        <button class="admin-btn danger" id="btnCancelRuler" title="Отменить измерение"><i class="fa-solid fa-xmark"></i> Закрыть</button>
                     </div>
                 </div>
 
@@ -727,31 +746,24 @@
         </div>
     </div>
 
-    <!-- Modal Dialog for Change Password -->
-    <div class="modal-overlay hidden" id="changePasswordModal">
-        <div class="modal-card" style="max-width: 400px;">
+    <!-- Modal Dialog for Announcement Edit -->
+    <div class="modal-overlay hidden" id="announcementModal">
+        <div class="modal-card" style="max-width: 480px;">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-key"></i> Сменить пароль</h3>
-                <button class="modal-close" id="closeChangePasswordModal">&times;</button>
+                <h3><i class="fa-solid fa-bullhorn"></i> Объявление карты</h3>
+                <button class="modal-close" id="closeAnnouncementModal">&times;</button>
             </div>
-            <form id="changePasswordForm">
+            <form id="announcementForm">
                 <div class="form-group">
-                    <label>Какую роль изменить:</label>
-                    <select id="changeRoleSelect">
-                        <option value="admin">Пароль Администратора</option>
-                        <option value="moderator">Пароль Модератора</option>
-                    </select>
+                    <label>Текст объявления (отображается сверху карты):</label>
+                    <textarea id="announcementTextInput" rows="3" placeholder="Введите важную информацию или анонс события..." required></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Текущий пароль выбранной роли:</label>
-                    <input type="password" id="currPasswordInput" placeholder="Текущий пароль" required>
-                </div>
-                <div class="form-group">
-                    <label>Новый пароль:</label>
-                    <input type="password" id="newPasswordInput" placeholder="Новый пароль" required minlength="3">
+                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                    <input type="checkbox" id="announcementActiveInput" checked style="width:auto; cursor:pointer;">
+                    <label for="announcementActiveInput" style="margin:0; cursor:pointer;">Показывать объявление на карте</label>
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn-secondary" id="btnCancelChangePassword">Отмена</button>
+                    <button type="button" class="btn-secondary" id="btnCancelAnnouncement">Отмена</button>
                     <button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Сохранить</button>
                 </div>
             </form>

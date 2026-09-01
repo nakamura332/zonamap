@@ -140,33 +140,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     //   браузере посетителя, локальные данные перезаписываются свежими.
     // ----------------------------------------------------------------------
     const DATA_VERSION_KEY = 'gta_sa_stalker_data_version';
+    const ANNOUNCEMENT_STORAGE_KEY = 'gta_sa_stalker_announcement';
+
+    let announcementData = { text: '', active: false };
 
     async function loadPublishedData() {
         try {
             const res = await fetch(`data.json?_=${Date.now()}`, { cache: 'no-store' });
-            if (!res.ok) return; // файла ещё нет — работаем с localStorage как раньше
-            const remote = await res.json();
-            const remoteVersion = String(remote.version || '');
-            const localVersion = localStorage.getItem(DATA_VERSION_KEY);
+            if (res.ok) {
+                const remote = await res.json();
+                const remoteVersion = String(remote.version || '');
+                const localVersion = localStorage.getItem(DATA_VERSION_KEY);
 
-            if (!localVersion || remoteVersion !== localVersion) {
-                allMarkersData = Array.isArray(remote.markers) ? remote.markers : [];
-                allZonesData = Array.isArray(remote.zones) ? remote.zones : [];
-                saveAllMarkersToStorage();
-                saveAllZonesToStorage();
-                localStorage.setItem(DATA_VERSION_KEY, remoteVersion);
+                if (!localVersion || remoteVersion !== localVersion) {
+                    allMarkersData = Array.isArray(remote.markers) ? remote.markers : [];
+                    allZonesData = Array.isArray(remote.zones) ? remote.zones : [];
+                    saveAllMarkersToStorage();
+                    saveAllZonesToStorage();
+                    localStorage.setItem(DATA_VERSION_KEY, remoteVersion);
+                }
             }
-            // если версия совпадает — значит в этом браузере уже есть
-            // неопубликованные локальные правки поверх текущего data.json,
-            // их не трогаем (актуально для админа, который ещё не экспортировал).
         } catch (e) {
-            // data.json недоступен (например, локальная разработка без сервера) —
-            // просто продолжаем работать с тем, что лежит в localStorage.
             console.warn('Не удалось загрузить data.json, использую localStorage:', e);
         }
-    }
 
-    await loadPublishedData();
+        // Загрузка объявления карты
+        try {
+            const aRes = await fetch(`announcement.json?_=${Date.now()}`, { cache: 'no-store' });
+            if (aRes.ok) {
+                const aData = await aRes.json();
+                if (aData && typeof aData.text === 'string') {
+                    announcementData = aData;
+                    return;
+                }
+            }
+        } catch (e) {}
+
+        const storedA = localStorage.getItem(ANNOUNCEMENT_STORAGE_KEY);
+        if (storedA) {
+            try { announcementData = JSON.parse(storedA); } catch (e) {}
+        }
+    }
 
     // ----------------------------------------------------------------------
     // 2. STATE MANAGEMENT & DOM ELEMENTS
@@ -191,6 +205,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     let pendingZoneType = 'danger';
     let pendingZoneMapId = 'all';
 
+    // State for Distance Measurement Ruler
+    let isRulerActive = false;
+    let rulerPointA = null;
+    let rulerPointB = null;
+
     // DOM Elements
     const mapViewport = document.getElementById('mapViewport');
     const mapContainer = document.getElementById('mapContainer');
@@ -198,13 +217,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const markersLayer = document.getElementById('markersLayer');
     const zonesSvgLayer = document.getElementById('zonesSvgLayer');
     const zoneDrawSvgLayer = document.getElementById('zoneDrawSvgLayer');
+    const rulerSvgLayer = document.getElementById('rulerSvgLayer');
     const coordsHud = document.getElementById('coordsHud');
     const coordsVal = document.getElementById('coordsVal');
     const zoomLevelVal = document.getElementById('zoomLevelVal');
     const detailsCard = document.getElementById('detailsCard');
     const searchInput = document.getElementById('searchInput');
+    const searchBadge = document.getElementById('searchBadge');
+    const searchResultsDropdown = document.getElementById('searchResultsDropdown');
 
-    // Admin & Modal DOM Elements
+    // Admin, Ruler & Announcement DOM Elements
     const btnToggleAdmin = document.getElementById('btnToggleAdmin');
     const adminHudBanner = document.getElementById('adminHudBanner');
     const cardAdminActions = document.getElementById('cardAdminActions');
@@ -219,6 +241,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnResetMarkers = document.getElementById('btnResetMarkers');
     const mapVersionSelect = document.getElementById('mapVersionSelect');
     const zoneManagerList = document.getElementById('zoneManagerList');
+
+    const btnRuler = document.getElementById('btnRuler');
+    const rulerDrawBanner = document.getElementById('rulerDrawBanner');
+    const rulerHint = document.getElementById('rulerHint');
+    const btnCancelRuler = document.getElementById('btnCancelRuler');
+
+    const topAnnouncementBanner = document.getElementById('topAnnouncementBanner');
+    const announcementText = document.getElementById('announcementText');
+    const btnEditAnnouncement = document.getElementById('btnEditAnnouncement');
+    const btnExportAnnouncement = document.getElementById('btnExportAnnouncement');
+    const announcementModal = document.getElementById('announcementModal');
+    const announcementForm = document.getElementById('announcementForm');
 
     // ----------------------------------------------------------------------
     // 3. MAP BACKGROUND & COORDINATES (3000x3000 Canvas)
@@ -480,6 +514,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (mouseX >= 0 && mouseX <= 3000 && mouseY >= 0 && mouseY <= 3000) {
             const samp = canvasToSAMPCoords(mouseX, mouseY);
             coordsVal.textContent = `/tp ${samp.x} ${samp.y} ${samp.z}`;
+
+            if (isRulerActive && rulerPointA && !rulerPointB) {
+                renderRulerLayer({ x: mouseX, y: mouseY });
+            }
         }
     });
 
@@ -489,17 +527,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        if (isDragging && isClickAction && isAdminMode) {
+        if (isDragging && isClickAction) {
             const rect = mapViewport.getBoundingClientRect();
             const clickX = Math.round((e.clientX - rect.left - currentX) / currentScale);
             const clickY = Math.round((e.clientY - rect.top - currentY) / currentScale);
 
             if (clickX >= 0 && clickX <= 3000 && clickY >= 0 && clickY <= 3000) {
-                if (isDrawingZone) {
-                    drawZonePoints.push([clickX, clickY]);
-                    renderZoneDrawPreview();
-                } else {
-                    openAddMarkerModal(clickX, clickY);
+                if (isRulerActive) {
+                    handleRulerMapClick(clickX, clickY);
+                } else if (isAdminMode) {
+                    if (isDrawingZone) {
+                        drawZonePoints.push([clickX, clickY]);
+                        renderZoneDrawPreview();
+                    } else {
+                        openAddMarkerModal(clickX, clickY);
+                    }
                 }
             }
         }
@@ -590,20 +632,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, { passive: false });
 
     mapViewport.addEventListener('touchend', (e) => {
-        // Tapping (no movement) in admin mode places a marker / zone point,
-        // mirroring the desktop click-to-add behaviour.
-        if (touchMode === 'pan' && !touchMoved && isAdminMode && e.changedTouches.length === 1) {
+        if (touchMode === 'pan' && !touchMoved && e.changedTouches.length === 1) {
             const t = e.changedTouches[0];
             const rect = mapViewport.getBoundingClientRect();
             const tapX = Math.round((t.clientX - rect.left - currentX) / currentScale);
             const tapY = Math.round((t.clientY - rect.top - currentY) / currentScale);
 
             if (tapX >= 0 && tapX <= 3000 && tapY >= 0 && tapY <= 3000) {
-                if (isDrawingZone) {
-                    drawZonePoints.push([tapX, tapY]);
-                    renderZoneDrawPreview();
-                } else {
-                    openAddMarkerModal(tapX, tapY);
+                if (isRulerActive) {
+                    handleRulerMapClick(tapX, tapY);
+                } else if (isAdminMode) {
+                    if (isDrawingZone) {
+                        drawZonePoints.push([tapX, tapY]);
+                        renderZoneDrawPreview();
+                    } else {
+                        openAddMarkerModal(tapX, tapY);
+                    }
                 }
             }
         }
@@ -687,9 +731,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ----------------------------------------------------------------------
     // 8. ADMIN & MODERATOR ROLES, AUTHENTICATION & MODALS (SHA-256)
     // ----------------------------------------------------------------------
-    // Default SHA-256 hashes: "admin" for Admin, "mod" for Moderator
-    const DEFAULT_ADMIN_HASH = 'ad9dafae71b15b8ec21cb8e8a0ab8915f8d05d84b4a5e74bef09ae91c1a3eea6';
-    const DEFAULT_MOD_HASH   = 'c4d196805716f61318238248fbf30842f9eb235867751415e6b1770cc5acf8c3';
+    // Default SHA-256 hashes: "goyda312" for Admin, "xerox312" for Cartographer (Moderator)
+    const DEFAULT_ADMIN_HASH = '00356afc944e76450667d70a52b803cebeeb633c260ebe8b9b4e642e72d96f0e';
+    const DEFAULT_MOD_HASH   = 'ad9dafae71b15b8ec21cb8e8a0ab8915f8d05d84b4a5e74bef09ae91c1a3eea6';
 
     let currentRole = null; // null | 'admin' | 'moderator'
 
@@ -723,21 +767,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (role) {
             sessionStorage.setItem('gta_sa_stalker_user_role', role);
             btnToggleAdmin.classList.add('active');
-            btnToggleAdmin.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> <span>Выйти (${role === 'admin' ? 'Админ' : 'Модератор'})</span>`;
+            btnToggleAdmin.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> <span>Выйти (${role === 'admin' ? 'Админ' : 'Картограф'})</span>`;
             adminHudBanner.classList.remove('hidden');
 
             if (adminStatusText) {
                 adminStatusText.innerHTML = role === 'admin'
                     ? '<i class="fa-solid fa-pen-to-square"></i> АДМИН-ПАНЕЛЬ'
-                    : '<i class="fa-solid fa-user-shield"></i> МОДЕРАЦИЯ';
+                    : '<i class="fa-solid fa-user-pen"></i> РЕЖИМ КАРТОГРАФА';
             }
 
-            // «Очистить всё» и «Экспорт JSON» — только для Админа
+            // Экспорт JSON доступен и Админу, и Картографу
+            if (btnExportJson) {
+                btnExportJson.style.display = (role === 'admin' || role === 'moderator') ? 'inline-flex' : 'none';
+            }
+
+            // Очистка карты и экспорт объявления — только для Главного Админа
+            document.querySelectorAll('.admin-only-feature').forEach(el => {
+                el.style.display = (role === 'admin') ? 'inline-flex' : 'none';
+            });
             if (resetBtn) {
                 resetBtn.style.display = (role === 'admin') ? 'inline-flex' : 'none';
-            }
-            if (btnExportJson) {
-                btnExportJson.style.display = (role === 'admin') ? 'inline-flex' : 'none';
             }
 
             if (activeSelectedMarker) cardAdminActions.classList.remove('hidden');
@@ -821,7 +870,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else if (enteredHash === getModHash()) {
                 document.getElementById('adminAuthModal').classList.add('hidden');
                 setRoleState('moderator');
-                alert('Успешный вход! Активирован режим Модератора (точечное редактирование без функции полной очистки).');
+                alert('Успешный вход! Активирован режим Картографа (редактирование меток/зон и экспорт JSON).');
             } else {
                 alert('Неверный пароль доступа!');
             }
@@ -830,54 +879,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('closeAdminAuthModal')?.addEventListener('click', () => document.getElementById('adminAuthModal').classList.add('hidden'));
     document.getElementById('btnCancelAdminAuth')?.addEventListener('click', () => document.getElementById('adminAuthModal').classList.add('hidden'));
-
-    // Change Password Form
-    const btnChangePassword = document.getElementById('btnChangePassword');
-    const changePasswordModal = document.getElementById('changePasswordModal');
-    const changePasswordForm = document.getElementById('changePasswordForm');
-
-    if (btnChangePassword) {
-        btnChangePassword.addEventListener('click', () => {
-            document.getElementById('currPasswordInput').value = '';
-            document.getElementById('newPasswordInput').value = '';
-            changePasswordModal.classList.remove('hidden');
-        });
-    }
-
-    if (changePasswordForm) {
-        changePasswordForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const targetRole = document.getElementById('changeRoleSelect').value;
-            const curr = document.getElementById('currPasswordInput').value.trim();
-            const newP = document.getElementById('newPasswordInput').value.trim();
-
-            const currHash = await sha256(curr);
-            const expectedHash = (targetRole === 'admin') ? getAdminHash() : getModHash();
-
-            if (currHash !== expectedHash) {
-                alert(`Текущий пароль для роли "${targetRole === 'admin' ? 'Администратор' : 'Модератор'}" введен неверно!`);
-                return;
-            }
-
-            if (newP.length < 3) {
-                alert('Новый пароль должен содержать минимум 3 символа.');
-                return;
-            }
-
-            const newHash = await sha256(newP);
-            if (targetRole === 'admin') {
-                localStorage.setItem('gta_sa_stalker_admin_hash', newHash);
-                alert('Пароль Администратора успешно изменен!');
-            } else {
-                localStorage.setItem('gta_sa_stalker_mod_hash', newHash);
-                alert('Пароль Модератора успешно изменен!');
-            }
-            changePasswordModal.classList.add('hidden');
-        });
-    }
-
-    document.getElementById('closeChangePasswordModal')?.addEventListener('click', () => changePasswordModal.classList.add('hidden'));
-    document.getElementById('btnCancelChangePassword')?.addEventListener('click', () => changePasswordModal.classList.add('hidden'));
 
     // ----------------------------------------------------------------------
     // ЗАГРУЗКА ФОТО ЧЕРЕЗ CLOUDINARY
@@ -1236,8 +1237,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    searchInput.addEventListener('input', () => renderMarkers());
-    document.getElementById('clearSearch').addEventListener('click', () => { searchInput.value = ''; renderMarkers(); });
+    searchInput.addEventListener('input', () => {
+        renderMarkers();
+        updateSearchDropdown();
+    });
+    searchInput.addEventListener('focus', () => updateSearchDropdown());
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-box')) {
+            searchResultsDropdown?.classList.add('hidden');
+        }
+    });
+
+    document.getElementById('clearSearch').addEventListener('click', () => {
+        searchInput.value = '';
+        renderMarkers();
+        updateSearchDropdown();
+    });
 
     document.getElementById('zoomIn').addEventListener('click', () => { currentScale = Math.min(currentScale * 1.25, 3.0); updateTransform(); });
     document.getElementById('zoomOut').addEventListener('click', () => { currentScale = Math.max(currentScale / 1.25, 0.2); updateTransform(); });
@@ -1247,6 +1263,309 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentX = -400;
         currentY = -400;
         updateTransform();
+    });
+
+    // ----------------------------------------------------------------------
+    // 14. SEARCH ENHANCEMENTS & DROPDOWN
+    // ----------------------------------------------------------------------
+    function updateSearchDropdown() {
+        if (!searchResultsDropdown) return;
+        const query = searchInput.value.trim().toLowerCase();
+
+        if (!query) {
+            if (searchBadge) searchBadge.classList.add('hidden');
+            searchResultsDropdown.classList.add('hidden');
+            searchResultsDropdown.innerHTML = '';
+            return;
+        }
+
+        const visibleMarkers = getVisibleMarkers();
+        const matched = visibleMarkers.filter(m => 
+            m.name.toLowerCase().includes(query) ||
+            m.location.toLowerCase().includes(query) ||
+            (m.desc && m.desc.toLowerCase().includes(query))
+        );
+
+        if (searchBadge) {
+            searchBadge.textContent = matched.length;
+            searchBadge.classList.remove('hidden');
+        }
+
+        if (matched.length === 0) {
+            searchResultsDropdown.innerHTML = '<div class="search-result-item" style="cursor:default; color:var(--text-muted);">Ничего не найдено</div>';
+            searchResultsDropdown.classList.remove('hidden');
+            return;
+        }
+
+        searchResultsDropdown.innerHTML = '';
+        matched.slice(0, 12).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'search-result-item';
+            const typeInfo = MARKER_TYPES_INFO[item.type] || { icon: '<i class="fa-solid fa-location-dot"></i>' };
+            const mapTag = (item.mapId === 'all' || !item.mapId) ? 'Все карты' : `Карта #${item.mapId.replace('map', '')}`;
+
+            row.innerHTML = `
+                <div class="search-result-icon ${item.type}">${typeInfo.icon}</div>
+                <div class="search-result-info">
+                    <div class="search-result-title">${item.name}</div>
+                    <div class="search-result-sub">${item.location} • ${mapTag}</div>
+                </div>
+            `;
+
+            row.addEventListener('click', (e) => {
+                e.stopPropagation();
+                searchResultsDropdown.classList.add('hidden');
+                focusOnMarker(item);
+            });
+
+            searchResultsDropdown.appendChild(row);
+        });
+
+        searchResultsDropdown.classList.remove('hidden');
+    }
+
+    function focusOnMarker(marker) {
+        if (marker.mapId && marker.mapId !== 'all' && marker.mapId !== currentMapId) {
+            switchMap(marker.mapId);
+        }
+
+        currentScale = 1.2;
+        const rect = mapViewport.getBoundingClientRect();
+        currentX = (rect.width / 2) - (marker.x * currentScale);
+        currentY = (rect.height / 2) - (marker.y * currentScale);
+        updateTransform();
+
+        openMarkerDetails(marker);
+
+        setTimeout(() => {
+            const el = document.querySelector(`.map-marker[data-id="${marker.id}"]`);
+            if (el) {
+                el.classList.add('marker-highlight');
+                setTimeout(() => el.classList.remove('marker-highlight'), 2500);
+            }
+        }, 100);
+    }
+
+    // ----------------------------------------------------------------------
+    // 15. DISTANCE MEASUREMENT RULER
+    // ----------------------------------------------------------------------
+    function toggleRulerMode(forceState) {
+        isRulerActive = forceState !== undefined ? forceState : !isRulerActive;
+
+        if (isRulerActive) {
+            if (isDrawingZone) stopZoneDraw();
+            rulerPointA = null;
+            rulerPointB = null;
+            btnRuler?.classList.add('active');
+            rulerDrawBanner?.classList.remove('hidden');
+            if (rulerHint) rulerHint.textContent = 'Кликните по карте, чтобы поставить первую точку (A)';
+            renderRulerLayer();
+        } else {
+            rulerPointA = null;
+            rulerPointB = null;
+            btnRuler?.classList.remove('active');
+            rulerDrawBanner?.classList.add('hidden');
+            if (rulerSvgLayer) rulerSvgLayer.innerHTML = '';
+        }
+    }
+
+    btnRuler?.addEventListener('click', () => toggleRulerMode());
+    btnCancelRuler?.addEventListener('click', () => toggleRulerMode(false));
+
+    function handleRulerMapClick(cx, cy) {
+        const samp = canvasToSAMPCoords(cx, cy);
+        const pt = { cx, cy, sampX: parseFloat(samp.x), sampY: parseFloat(samp.y) };
+
+        if (!rulerPointA || (rulerPointA && rulerPointB)) {
+            rulerPointA = pt;
+            rulerPointB = null;
+            if (rulerHint) rulerHint.textContent = 'Двигайте мышь и кликните вторую точку (B) для завершения измерения';
+        } else {
+            rulerPointB = pt;
+            const dist = Math.hypot(rulerPointB.sampX - rulerPointA.sampX, rulerPointB.sampY - rulerPointA.sampY).toFixed(1);
+            if (rulerHint) rulerHint.textContent = `Дистанция A-B: ${dist} м. Кликните карту для нового измерения.`;
+        }
+        renderRulerLayer();
+    }
+
+    function renderRulerLayer(hoverCanvasPos) {
+        if (!rulerSvgLayer || !isRulerActive) return;
+        rulerSvgLayer.innerHTML = '';
+
+        const ptA = rulerPointA;
+        const ptB = rulerPointB || (hoverCanvasPos ? {
+            cx: hoverCanvasPos.x,
+            cy: hoverCanvasPos.y,
+            sampX: parseFloat(canvasToSAMPCoords(hoverCanvasPos.x, hoverCanvasPos.y).x),
+            sampY: parseFloat(canvasToSAMPCoords(hoverCanvasPos.x, hoverCanvasPos.y).y)
+        } : null);
+
+        if (ptA) {
+            const circleA = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circleA.setAttribute('cx', ptA.cx);
+            circleA.setAttribute('cy', ptA.cy);
+            circleA.setAttribute('r', 9);
+            circleA.setAttribute('fill', '#00e5ff');
+            circleA.setAttribute('stroke', '#fff');
+            circleA.setAttribute('stroke-width', '3');
+            rulerSvgLayer.appendChild(circleA);
+
+            const textA = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textA.setAttribute('x', ptA.cx);
+            textA.setAttribute('y', ptA.cy - 14);
+            textA.setAttribute('fill', '#00e5ff');
+            textA.setAttribute('font-size', '14');
+            textA.setAttribute('font-weight', 'bold');
+            textA.setAttribute('text-anchor', 'middle');
+            textA.textContent = 'A';
+            rulerSvgLayer.appendChild(textA);
+        }
+
+        if (ptA && ptB) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', ptA.cx);
+            line.setAttribute('y1', ptA.cy);
+            line.setAttribute('x2', ptB.cx);
+            line.setAttribute('y2', ptB.cy);
+            line.setAttribute('stroke', '#00e5ff');
+            line.setAttribute('stroke-width', '4');
+            line.setAttribute('stroke-dasharray', '8,4');
+            rulerSvgLayer.appendChild(line);
+
+            const circleB = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circleB.setAttribute('cx', ptB.cx);
+            circleB.setAttribute('cy', ptB.cy);
+            circleB.setAttribute('r', 9);
+            circleB.setAttribute('fill', '#00e5ff');
+            circleB.setAttribute('stroke', '#fff');
+            circleB.setAttribute('stroke-width', '3');
+            rulerSvgLayer.appendChild(circleB);
+
+            const textB = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textB.setAttribute('x', ptB.cx);
+            textB.setAttribute('y', ptB.cy - 14);
+            textB.setAttribute('fill', '#00e5ff');
+            textB.setAttribute('font-size', '14');
+            textB.setAttribute('font-weight', 'bold');
+            textB.setAttribute('text-anchor', 'middle');
+            textB.textContent = 'B';
+            rulerSvgLayer.appendChild(textB);
+
+            const midX = (ptA.cx + ptB.cx) / 2;
+            const midY = (ptA.cy + ptB.cy) / 2;
+            const distMeters = Math.hypot(ptB.sampX - ptA.sampX, ptB.sampY - ptA.sampY).toFixed(1);
+
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', midX - 50);
+            rect.setAttribute('y', midY - 15);
+            rect.setAttribute('width', 100);
+            rect.setAttribute('height', 24);
+            rect.setAttribute('rx', 6);
+            rect.setAttribute('fill', 'rgba(10, 14, 20, 0.9)');
+            rect.setAttribute('stroke', '#00e5ff');
+            rect.setAttribute('stroke-width', '1.5');
+            rulerSvgLayer.appendChild(rect);
+
+            const distText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            distText.setAttribute('x', midX);
+            distText.setAttribute('y', midY + 2);
+            distText.setAttribute('fill', '#fff');
+            distText.setAttribute('font-size', '12');
+            distText.setAttribute('font-weight', 'bold');
+            distText.setAttribute('text-anchor', 'middle');
+            distText.textContent = `${distMeters} м`;
+            rulerSvgLayer.appendChild(distText);
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // 16. COORDS HUD CLICK TO COPY & TOAST
+    // ----------------------------------------------------------------------
+    if (coordsHud) {
+        coordsHud.addEventListener('click', () => {
+            const txt = coordsVal ? coordsVal.textContent : '';
+            if (!txt || txt.includes('Наведите')) return;
+
+            navigator.clipboard.writeText(txt).then(() => {
+                showToastNotification(`Скопировано: ${txt}`);
+            }).catch(() => {
+                prompt('Скопируйте команду телепорта:', txt);
+            });
+        });
+    }
+
+    function showToastNotification(msg) {
+        const existing = document.querySelector('.coords-copied-toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'coords-copied-toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    // ----------------------------------------------------------------------
+    // 17. ANNOUNCEMENT MODAL & EVENT HANDLERS
+    // ----------------------------------------------------------------------
+    function saveAnnouncementData() {
+        localStorage.setItem(ANNOUNCEMENT_STORAGE_KEY, JSON.stringify(announcementData));
+        renderAnnouncementBanner();
+    }
+
+    function renderAnnouncementBanner() {
+        if (!topAnnouncementBanner || !announcementText) return;
+
+        if (announcementData.active && announcementData.text && announcementData.text.trim() && !sessionStorage.getItem('announcement_closed')) {
+            announcementText.textContent = announcementData.text;
+            topAnnouncementBanner.classList.remove('hidden');
+        } else {
+            topAnnouncementBanner.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('closeAnnouncement')?.addEventListener('click', () => {
+        sessionStorage.setItem('announcement_closed', 'true');
+        renderAnnouncementBanner();
+    });
+
+    btnEditAnnouncement?.addEventListener('click', () => {
+        if (currentRole !== 'admin') {
+            alert('Редактирование объявления доступно только Главным Администраторам!');
+            return;
+        }
+        document.getElementById('announcementTextInput').value = announcementData.text || '';
+        document.getElementById('announcementActiveInput').checked = !!announcementData.active;
+        announcementModal?.classList.remove('hidden');
+    });
+
+    document.getElementById('closeAnnouncementModal')?.addEventListener('click', () => announcementModal?.classList.add('hidden'));
+    document.getElementById('btnCancelAnnouncement')?.addEventListener('click', () => announcementModal?.classList.add('hidden'));
+
+    announcementForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = document.getElementById('announcementTextInput').value.trim();
+        const active = document.getElementById('announcementActiveInput').checked;
+        announcementData = { text, active };
+        sessionStorage.removeItem('announcement_closed');
+        saveAnnouncementData();
+        announcementModal?.classList.add('hidden');
+        alert('Объявление карты успешно сохранено!');
+    });
+
+    btnExportAnnouncement?.addEventListener('click', () => {
+        if (currentRole !== 'admin') {
+            alert('Функция доступна только Главным Администраторам!');
+            return;
+        }
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(announcementData, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "announcement.json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        alert('Файл announcement.json скачан. Положите его в корень сайта рядом с index.html!');
     });
 
     document.getElementById('btnToggleLabels').addEventListener('click', () => { showLabels = !showLabels; renderMarkers(); });
@@ -1603,6 +1922,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // INITIAL START
     // ----------------------------------------------------------------------
     initMapBackground();
+    await loadPublishedData();
+    renderAnnouncementBanner();
     renderHazardZones();
     renderMarkers();
     updateTransform();
