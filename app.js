@@ -4,22 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
     // ----------------------------------------------------------------------
-    // 0. CLOUDINARY UPLOAD CONFIG (загрузка фото)
-    // Imgur больше не выдаёт новые Client-ID (регистрация закрыта с 2025),
-    // поэтому фото грузим на Cloudinary — там это официально поддерживаемый
-    // и бесплатный (25 ГБ) способ анонимной загрузки прямо из браузера.
-    //
-    // Как получить эти два значения (5 минут):
-    // 1) Зарегистрируйся на https://cloudinary.com (бесплатный план хватит с запасом)
-    // 2) На Dashboard скопируй "Cloud name" -> вставь в CLOUDINARY_CLOUD_NAME
-    // 3) Зайди в Settings -> Upload -> Upload presets -> Add upload preset
-    //    -> Signing Mode поставь "Unsigned" -> Save
-    //    -> скопируй имя пресета -> вставь в CLOUDINARY_UPLOAD_PRESET
-    // ----------------------------------------------------------------------
-    const CLOUDINARY_CLOUD_NAME = 'z7zrvru6';
-    const CLOUDINARY_UPLOAD_PRESET = 'sampzona';
-
-    // ----------------------------------------------------------------------
     // 1. DATA & MAP DEFINITIONS
     // ----------------------------------------------------------------------
     const ZONE_STYLES = {
@@ -890,106 +874,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btnCancelAdminAuth')?.addEventListener('click', () => document.getElementById('adminAuthModal').classList.add('hidden'));
 
     // ----------------------------------------------------------------------
-    // ЗАГРУЗКА ФОТО ЧЕРЕЗ CLOUDINARY
-    // Вместо хранения фото как base64 (тяжело, не влезет в localStorage/JSON
-    // при сотнях точек) — файл загружается на Cloudinary, а в маркере хранится
-    // только короткая ссылка на картинку.
-    //
-    // pendingImageFile — новый файл, выбранный в этой сессии модалки, ещё
-    //                     не загруженный на Cloudinary (загрузится при сохранении).
-    // existingPhotoUrl  — уже сохранённая ссылка на фото (при редактировании).
-    // photoRemoved      — пользователь явно нажал "удалить фото".
+    // БЕЗОПАСНАЯ ОБРАБОТКА И ХРАНЕНИЕ ФОТО (ТОЛЬКО ПРЯМЫЕ ССЫЛКИ / URL)
+    // Без применения локального base64 в JSON и без применения сторонних API-ключей.
     // ----------------------------------------------------------------------
-    let pendingImageFile = null;
-    let existingPhotoUrl = null;
-    let photoRemoved = false;
-
-    const imgUploadArea = document.getElementById('imgUploadArea');
-    const imgUploadInput = document.getElementById('markerImageInput');
+    const markerPhotoUrlInput = document.getElementById('markerPhotoUrl');
+    const photoPreviewBox = document.getElementById('photoPreviewBox');
     const imgUploadPreview = document.getElementById('imgUploadPreview');
-    const imgUploadPlaceholder = document.getElementById('imgUploadPlaceholder');
     const imgRemoveBtn = document.getElementById('imgRemoveBtn');
 
-    // Показывает превью (по локальному base64 для нового файла ИЛИ по
-    // готовому URL для уже сохранённого фото). Ничего не грузит на сервер.
-    function showImagePreview(srcUrl) {
-        imgUploadPreview.src = srcUrl;
-        imgUploadPreview.classList.remove('hidden');
-        imgUploadPlaceholder.style.display = 'none';
-        imgRemoveBtn.classList.remove('hidden');
-    }
-
-    function clearImagePreview() {
-        pendingImageFile = null;
-        existingPhotoUrl = null;
-        photoRemoved = false;
-        imgUploadPreview.src = '';
-        imgUploadPreview.classList.add('hidden');
-        imgUploadPlaceholder.style.display = '';
-        imgRemoveBtn.classList.add('hidden');
-        imgUploadInput.value = '';
-    }
-
-    function handleSelectedFile(file) {
-        if (!file || !file.type.startsWith('image/')) return;
-        if (file.size > 5 * 1024 * 1024) { alert('Файл слишком большой (максимум 5 МБ)'); return; }
-        pendingImageFile = file;
-        photoRemoved = false;
-        // локальное превью — только для отображения в модалке, на сервер не уходит
-        const reader = new FileReader();
-        reader.onload = (e) => showImagePreview(e.target.result);
-        reader.readAsDataURL(file);
-    }
-
-    // Загружает файл на Cloudinary (анонимно, через unsigned upload preset)
-    // и возвращает прямую ссылку на изображение.
-    async function uploadPhoto(file) {
-        if (!CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME === 'ВСТАВЬ_СВОЙ_CLOUD_NAME' ||
-            !CLOUDINARY_UPLOAD_PRESET || CLOUDINARY_UPLOAD_PRESET === 'ВСТАВЬ_СВОЙ_UPLOAD_PRESET') {
-            throw new Error('Не настроены CLOUDINARY_CLOUD_NAME / CLOUDINARY_UPLOAD_PRESET в app.js');
+    function updatePhotoPreview(url) {
+        if (!imgUploadPreview || !photoPreviewBox) return;
+        const cleanUrl = (url || '').trim();
+        if (cleanUrl) {
+            imgUploadPreview.src = cleanUrl;
+            photoPreviewBox.classList.remove('hidden');
+        } else {
+            imgUploadPreview.src = '';
+            photoPreviewBox.classList.add('hidden');
         }
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-        if (!res.ok || !data.secure_url) {
-            throw new Error(data?.error?.message || 'Ошибка загрузки на Cloudinary');
-        }
-        return data.secure_url;
     }
 
-    imgUploadArea.addEventListener('click', (e) => {
-        if (e.target === imgRemoveBtn || imgRemoveBtn.contains(e.target)) return;
-        imgUploadInput.click();
+    markerPhotoUrlInput?.addEventListener('input', () => {
+        updatePhotoPreview(markerPhotoUrlInput.value);
     });
 
-    imgUploadInput.addEventListener('change', () => {
-        handleSelectedFile(imgUploadInput.files[0]);
-    });
-
-    imgRemoveBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        photoRemoved = true;
-        pendingImageFile = null;
-        existingPhotoUrl = null;
-        imgUploadPreview.src = '';
-        imgUploadPreview.classList.add('hidden');
-        imgUploadPlaceholder.style.display = '';
-        imgRemoveBtn.classList.add('hidden');
-        imgUploadInput.value = '';
-    });
-
-    // Drag & Drop photo
-    imgUploadArea.addEventListener('dragover', (e) => { e.preventDefault(); imgUploadArea.classList.add('drag-over'); });
-    imgUploadArea.addEventListener('dragleave', () => imgUploadArea.classList.remove('drag-over'));
-    imgUploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        imgUploadArea.classList.remove('drag-over');
-        handleSelectedFile(e.dataTransfer.files[0]);
+    imgRemoveBtn?.addEventListener('click', () => {
+        if (markerPhotoUrlInput) markerPhotoUrlInput.value = '';
+        updatePhotoPreview('');
     });
 
     const cardPhotoWrap = document.getElementById('cardPhotoWrap');
@@ -1015,7 +926,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('markerX').value = samp.x;
         document.getElementById('markerY').value = samp.y;
         document.getElementById('markerDesc').value = 'Описание точки, артефактов или секретного лута.';
-        clearImagePreview();
+        if (markerPhotoUrlInput) markerPhotoUrlInput.value = '';
+        updatePhotoPreview('');
 
         markerModal.classList.remove('hidden');
     }
@@ -1033,15 +945,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('markerY').value = samp.y;
         document.getElementById('markerDesc').value = activeSelectedMarker.desc;
 
-        pendingImageFile = null;
-        photoRemoved = false;
-        if (activeSelectedMarker.photo) {
-            existingPhotoUrl = activeSelectedMarker.photo;
-            showImagePreview(activeSelectedMarker.photo);
-        } else {
-            existingPhotoUrl = null;
-            clearImagePreview();
-        }
+        const currentPhoto = activeSelectedMarker.photo || '';
+        if (markerPhotoUrlInput) markerPhotoUrlInput.value = currentPhoto;
+        updatePhotoPreview(currentPhoto);
 
         markerModal.classList.remove('hidden');
     });
@@ -1057,7 +963,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    markerForm.addEventListener('submit', async (e) => {
+    markerForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
         const id = document.getElementById('markerId').value;
@@ -1069,24 +975,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const sampY = parseFloat(document.getElementById('markerY').value);
         const desc = document.getElementById('markerDesc').value.trim();
 
-        // Определяем итоговое фото: новый файл нужно сначала загрузить на Cloudinary
-        let photo = photoRemoved ? null : existingPhotoUrl;
-
-        if (pendingImageFile) {
-            const originalLabel = btnSaveMarker.innerHTML;
-            btnSaveMarker.disabled = true;
-            btnSaveMarker.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Загрузка фото...';
-            try {
-                photo = await uploadPhoto(pendingImageFile);
-            } catch (err) {
-                alert('Не удалось загрузить фото: ' + err.message);
-                btnSaveMarker.disabled = false;
-                btnSaveMarker.innerHTML = originalLabel;
-                return;
-            }
-            btnSaveMarker.disabled = false;
-            btnSaveMarker.innerHTML = originalLabel;
-        }
+        const photo = markerPhotoUrlInput ? (markerPhotoUrlInput.value.trim() || null) : null;
 
         const canvasCoords = sampToCanvasCoords(sampX, sampY);
 

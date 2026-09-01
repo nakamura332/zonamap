@@ -705,16 +705,11 @@
                     <textarea id="markerDesc" rows="3" placeholder="Описание аномалии, лута или артефактов..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Фото локации:</label>
-                    <div class="img-upload-area" id="imgUploadArea">
-                        <div class="img-upload-placeholder" id="imgUploadPlaceholder">
-                            <i class="fa-solid fa-image"></i>
-                            <span>Нажмите или перетащите скриншот</span>
-                            <small>JPG, PNG, WEBP — до 5 МБ</small>
-                        </div>
-                        <img class="img-upload-preview hidden" id="imgUploadPreview" src="" alt="">
-                        <button type="button" class="img-remove-btn hidden" id="imgRemoveBtn"><i class="fa-solid fa-xmark"></i></button>
-                        <input type="file" id="markerImageInput" accept="image/*" style="display:none">
+                    <label>Ссылка на фото локации (URL):</label>
+                    <input type="url" id="markerPhotoUrl" placeholder="https://i.imgur.com/example.png (ссылка с любого фотохостинга)">
+                    <div class="photo-preview-box hidden" id="photoPreviewBox" style="margin-top: 8px; position: relative;">
+                        <img id="imgUploadPreview" src="" alt="Превью фото" style="max-height: 150px; border-radius: 8px; width: 100%; object-fit: cover;">
+                        <button type="button" class="img-remove-btn" id="imgRemoveBtn" title="Очистить ссылку" style="position: absolute; top: 6px; right: 6px;"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
                 <div class="modal-actions">
