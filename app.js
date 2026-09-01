@@ -237,7 +237,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnSaveMarker = document.getElementById('btnSaveMarker');
     const btnDeleteMarker = document.getElementById('btnDeleteMarker');
     const btnExportJson = document.getElementById('btnExportJson');
-    const importJsonInput = document.getElementById('importJsonInput');
     const btnResetMarkers = document.getElementById('btnResetMarkers');
     const mapVersionSelect = document.getElementById('mapVersionSelect');
     const zoneManagerList = document.getElementById('zoneManagerList');
@@ -427,6 +426,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         return allMarkersData.filter(m => (m.mapId || 'all') === 'all' || m.mapId === currentMapId);
     }
 
+    function matchesQuery(item, query) {
+        if (!query) return true;
+        const q = String(query).trim().toLowerCase();
+        if (!q) return true;
+        const name = String(item.name || '').toLowerCase();
+        const location = String(item.location || '').toLowerCase();
+        const desc = String(item.desc || '').toLowerCase();
+        const typeName = String(getTypeName(item.type) || '').toLowerCase();
+
+        return name.includes(q) || location.includes(q) || desc.includes(q) || typeName.includes(q);
+    }
+
     function renderMarkers() {
         markersLayer.innerHTML = '';
         let visibleCount = 0;
@@ -441,10 +452,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!activeFilters.has(item.type)) return;
 
-            const query = searchInput.value.trim().toLowerCase();
-            if (query && !item.name.toLowerCase().includes(query) && !item.location.toLowerCase().includes(query) && !item.desc.toLowerCase().includes(query)) {
-                return;
-            }
+            const query = searchInput.value;
+            if (!matchesQuery(item, query)) return;
 
             visibleCount++;
 
@@ -1136,32 +1145,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('Файл data.json скачан.');
     });
 
-    importJsonInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-            try {
-                const imported = JSON.parse(evt.target.result);
-                if (Array.isArray(imported)) {
-                    allMarkersData = imported;
-                } else if (imported && (imported.markers || imported.zones)) {
-                    if (imported.markers) allMarkersData = imported.markers;
-                    if (imported.zones) allZonesData = imported.zones;
-                }
-                saveAllMarkersToStorage();
-                saveAllZonesToStorage();
-                renderMarkers();
-                renderHazardZones();
-                alert('Данные успешно загружены из JSON файла!');
-            } catch (err) {
-                alert('Ошибка чтения файла JSON.');
-            }
-        };
-        reader.readAsText(file);
-    });
-
     btnResetMarkers.addEventListener('click', () => {
         if (currentRole !== 'admin') {
             alert('Функция полной очистки карты доступна только Главным Администраторам!');
@@ -1280,15 +1263,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const visibleMarkers = getVisibleMarkers();
-        const matched = visibleMarkers.filter(m => 
-            m.name.toLowerCase().includes(query) ||
-            m.location.toLowerCase().includes(query) ||
-            (m.desc && m.desc.toLowerCase().includes(query))
-        );
+        const matched = visibleMarkers.filter(m => activeFilters.has(m.type) && matchesQuery(m, query));
 
         if (searchBadge) {
             searchBadge.textContent = matched.length;
-            searchBadge.classList.remove('hidden');
+            if (matched.length > 0) {
+                searchBadge.classList.remove('hidden');
+            } else {
+                searchBadge.classList.add('hidden');
+            }
         }
 
         if (matched.length === 0) {
