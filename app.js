@@ -69,13 +69,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     function loadAllMarkers() {
         const stored = localStorage.getItem(markersStorageKey());
         if (stored) {
-            try { return JSON.parse(stored); } catch (e) { console.error(e); }
+            try {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed)) return parsed;
+            } catch (e) { console.error(e); }
         }
         const legacy = localStorage.getItem('gta_sa_stalker_markers_map1');
         if (legacy) {
             try {
                 const parsed = JSON.parse(legacy);
-                return parsed.map(m => ({ ...m, mapId: m.mapId || 'map1' }));
+                if (Array.isArray(parsed)) {
+                    return parsed.map(m => ({ ...m, mapId: m.mapId || 'map1' }));
+                }
             } catch (e) {}
         }
         return [];
@@ -84,24 +89,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     function loadAllZones() {
         const stored = localStorage.getItem(zonesStorageKey());
         if (stored) {
-            try { return JSON.parse(stored); } catch (e) { console.error(e); }
+            try {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed)) return parsed;
+            } catch (e) { console.error(e); }
         }
         const legacy = localStorage.getItem('gta_sa_stalker_zones_map1');
         if (legacy) {
             try {
                 const parsed = JSON.parse(legacy);
-                return parsed.map(z => ({ ...z, mapId: z.mapId || 'map1' }));
+                if (Array.isArray(parsed)) {
+                    return parsed.map(z => ({ ...z, mapId: z.mapId || 'map1' }));
+                }
             } catch (e) {}
         }
         return [];
     }
 
     function saveAllMarkersToStorage() {
-        localStorage.setItem(markersStorageKey(), JSON.stringify(allMarkersData));
+        try {
+            localStorage.setItem(markersStorageKey(), JSON.stringify(allMarkersData));
+        } catch (e) {
+            console.warn('Превышен лимит localStorage браузера при сохранении меток:', e);
+        }
     }
 
     function saveAllZonesToStorage() {
-        localStorage.setItem(zonesStorageKey(), JSON.stringify(allZonesData));
+        try {
+            localStorage.setItem(zonesStorageKey(), JSON.stringify(allZonesData));
+        } catch (e) {
+            console.warn('Превышен лимит localStorage браузера при сохранении зон:', e);
+        }
     }
 
     let allMarkersData = loadAllMarkers();
@@ -144,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const remoteVersion = String(remote.version || '');
                 const localVersion = localStorage.getItem(DATA_VERSION_KEY);
 
-                if (!localVersion || remoteVersion !== localVersion) {
+                if ((!localVersion || remoteVersion !== localVersion) && !isSessionAuthed()) {
                     allMarkersData = Array.isArray(remote.markers) ? remote.markers : [];
                     allZonesData = Array.isArray(remote.zones) ? remote.zones : [];
                     saveAllMarkersToStorage();
@@ -351,7 +369,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <i class="fa-solid fa-draw-polygon"></i>
                 </span>
                 <div class="zone-item-info">
-                    <span class="zone-item-title">${zone.name}</span>
+                    <span class="zone-item-title">${escapeHTML(zone.name)}</span>
                     <span class="zone-item-map-tag">${mapLabel}</span>
                 </div>
                 <div class="zone-item-actions">
@@ -1046,11 +1064,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        // запоминаем версию как "текущую" в этом браузере, чтобы при
-        // следующей загрузке страницы твои же локальные правки не были
-        // затёрты (они и есть содержимое этого файла)
         localStorage.setItem(DATA_VERSION_KEY, newVersion);
-        alert('Файл data.json скачан.');
+        alert('Файл data.json успешно скачан.');
     });
 
     btnResetMarkers.addEventListener('click', () => {
