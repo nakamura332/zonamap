@@ -418,6 +418,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         return allMarkersData.filter(m => (m.mapId || 'all') === 'all' || m.mapId === currentMapId);
     }
 
+    function escapeHTML(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     function matchesQuery(item, query) {
         if (!query) return true;
         const q = String(query).trim().toLowerCase();
@@ -461,7 +471,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="marker-inner">
                     ${info.icon}
                 </div>
-                ${showLabels ? `<div class="marker-label">${item.name}</div>` : ''}
+                ${showLabels ? `<div class="marker-label">${escapeHTML(item.name)}</div>` : ''}
             `;
 
             marker.addEventListener('click', (e) => {
@@ -1188,8 +1198,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             row.innerHTML = `
                 <div class="search-result-icon ${item.type}">${typeInfo.icon}</div>
                 <div class="search-result-info">
-                    <div class="search-result-title">${item.name}</div>
-                    <div class="search-result-sub">${item.location} • ${mapTag}</div>
+                    <div class="search-result-title">${escapeHTML(item.name)}</div>
+                    <div class="search-result-sub">${escapeHTML(item.location)} • ${mapTag}</div>
                 </div>
             `;
 
